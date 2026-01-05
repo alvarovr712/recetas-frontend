@@ -1,0 +1,120 @@
+:host {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  display: block;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* Left Panel Gradient */
+.left-panel {
+  background: #7a00ff;
+  /* Fallback */
+  background: linear-gradient(180deg, #8500ff 0%, #6a00cc 100%);
+  /* More vertical, vibrant gradient to match image */
+}
+
+.logo-icon {
+  background: rgba(255, 255, 255, 0.2);
+  /* Glassy background */
+  border-radius: 24px;
+  /* More rounded as in image */
+  padding: 1.5rem;
+  width: 120px;
+  /* Larger presence */
+  height: 120px;
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.brand-icon-svg {
+  width: 70%;
+  height: 70%;
+}
+
+.brand-name {
+  font-size: 3.5rem;
+  /* Larger font for impact */
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  margin-bottom: 1rem;
+}
+
+.brand-tagline {
+  font-size: 1.25rem;
+  line-height: 1.5;
+  font-weight: 300;
+  opacity: 0.9;
+}
+
+/* Right Panel */
+.right-panel {
+  background-color: white;
+}
+
+.login-form-container {
+  max-width: 380px;
+}
+
+/* Input group styling fixes/overrides */
+.input-group-text {
+  border-color: #e5e7eb;
+}
+
+.form-control {
+  border-color: #e5e7eb;
+  font-size: 0.9rem;
+  /* Smaller text within inputs */
+}
+
+.form-control:focus {
+  border-color: #7a00ff;
+  box-shadow: none;
+  border-right-width: 0px;
+}
+
+.input-group:focus-within .input-group-text,
+.input-group:focus-within .form-control {
+  border-color: #7a00ff;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.text-brand {
+  color: #7a00ff !important;
+}
+
+.btn-primary {
+  background-color: #7a00ff;
+  border-color: #7a00ff;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: #6600cc !important;
+  border-color: #6600cc !important;
+  transform: translateY(-1px);
+}
+
+.divider hr {
+  opacity: 0.15;
+}
+
+.footer-links {
+  font-size: 0.7rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .brand-name {
+    font-size: 2.5rem;
+  }
+}
