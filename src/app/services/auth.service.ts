@@ -10,7 +10,7 @@ export class AuthService {
 
   private readonly baseUrl = 'http://localhost:8080';  // Pon aquí la URL real de tu backend
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   login(loginRequest: LoginRequest): Observable<string> {
     return this.http.post(`${this.baseUrl}/auth/login`, loginRequest, {
@@ -19,7 +19,14 @@ export class AuthService {
     });
   }
 
- 
+  getUserInfo(): Observable<{ username: string; role: string }> {
+    return this.http.get<{ username: string; role: string }>(
+      `${this.baseUrl}/auth/me`,
+      { withCredentials: true }  // para enviar la cookie y recibir la info
+    );
+  }
+
+
 }
 
 
