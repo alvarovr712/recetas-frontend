@@ -16,22 +16,18 @@
   <div class="menu-section">
     <a *ngFor="let item of menuItems" [routerLink]="item.route" routerLinkActive="active" class="menu-item">
       <span class="icon">
-        <i [class]="item.icon" style="font-size: 1.2rem;"></i>
+        <i [class]="item.icon" style="font-size: 1rem;"></i>
       </span>
       <span class="label">{{ item.label }}</span>
     </a>
   </div>
 
   <div class="bottom-section">
-    <div class="menu-label">CUENTA</div>
-    <!-- Configuración is now in the main menu lists, or can be kept separate. 
-         Based on my TS update, I put it in the list. I will remove the separate Config button -->
 
-    <div class="spacer"></div>
 
     <button class="logout-btn" (click)="logout()">
       <span class="icon">
-        <i class="bi bi-box-arrow-right" style="font-size: 1.2rem;"></i>
+        <i class="bi bi-box-arrow-right" style="font-size: 0.9rem;"></i>
       </span>
       <span class="label">Cerrar sesión</span>
     </button>

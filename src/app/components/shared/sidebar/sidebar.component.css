@@ -65,13 +65,13 @@
 
 .brand-name {
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 0.9rem;
     /* Reduced font size */
     line-height: 1.2;
 }
 
 .brand-subtitle {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     /* Reduced font size */
     opacity: 0.8;
 }
@@ -80,7 +80,7 @@
 .menu-section {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
     /* Reduced gap */
     margin-bottom: auto;
     /* Pushes bottom section down */
@@ -89,15 +89,15 @@
 .menu-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
+    gap: 8px;
+    padding: 8px 10px;
     /* Reduced padding */
     border-radius: 8px;
     color: white;
     text-decoration: none;
     transition: background-color 0.2s, transform 0.1s;
-    font-size: 0.85rem;
-    /* Reduced font size */
+    font-size: 0.75rem;
+    /* Much smaller font size */
     font-weight: 500;
 }
 
@@ -118,9 +118,9 @@
 }
 
 .icon svg {
-    width: 18px;
+    width: 16px;
     /* Force smaller icons */
-    height: 18px;
+    height: 16px;
 }
 
 /* Bottom Section */
@@ -128,19 +128,9 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
-    padding-top: 16px;
+    padding-top: 12px;
     /* Reduced padding */
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.menu-label {
-    font-size: 0.65rem;
-    /* Reduced font size */
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    opacity: 0.6;
-    margin-bottom: 6px;
-    padding-left: 12px;
 }
 
 .spacer {
@@ -150,20 +140,23 @@
 .logout-btn {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
+    justify-content: center;
+    /* Center content */
+    gap: 6px;
+    padding: 4px 8px;
     /* Reduced padding */
-    border-radius: 8px;
+    border-radius: 6px;
+    /* Smaller radius */
     background-color: rgba(0, 0, 0, 0.2);
     /* Slightly darker for contrast */
     color: white;
     border: none;
     cursor: pointer;
-    font-size: 0.85rem;
-    /* Reduced font size */
+    font-size: 0.7rem;
+    /* Much smaller font size */
     font-weight: 500;
     width: 100%;
-    margin-top: 16px;
+    margin-top: 10px;
     transition: background-color 0.2s;
     font-family: inherit;
 }

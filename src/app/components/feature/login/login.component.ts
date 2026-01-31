@@ -31,9 +31,21 @@ export class LoginComponent {
         next: (res) => {
           this.loading = false;
           this.toastr.success('Logeado con éxito', 'Bienvenido');
-          setTimeout(() => {
-            this.router.navigate(['/recipes']);
-          }, 3000);
+
+          // Fetch user info to decide where to redirect
+          this.authService.getUserInfo().subscribe({
+            next: (user) => {
+              if (user.role === 'ADMIN') {
+                this.router.navigate(['/admin/dashboard']);
+              } else {
+                this.router.navigate(['/recipes']);
+              }
+            },
+            error: () => {
+              // Fallback if getUserInfo fails
+              this.router.navigate(['/recipes']);
+            }
+          });
         },
         error: (err) => {
           this.loading = false;

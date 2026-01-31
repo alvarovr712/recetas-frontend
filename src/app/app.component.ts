@@ -32,7 +32,11 @@ export class AppComponent implements OnInit {
         console.log('User info:', user);
         if (user && user.username) {
           if (this.router.url === '/login') {
-            this.router.navigate(['/recipes']);
+            if (user.role === 'ADMIN') {
+              this.router.navigate(['/dashboard']);
+            } else {
+              this.router.navigate(['/recipes']);
+            }
           }
         } else {
           this.router.navigate(['/login']);
