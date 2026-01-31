@@ -1,0 +1,13 @@
+<div class="app-container">
+    <app-sidebar *ngIf="!isLoginPage"></app-sidebar>
+
+    <!-- Mobile Backdrop -->
+    <div class="sidebar-backdrop" *ngIf="!isLoginPage && (layoutService.sidebarOpen$ | async)"
+        (click)="layoutService.closeSidebar()">
+    </div>
+
+    <main class="main-content" [class.with-sidebar]="!isLoginPage">
+        <app-navbar *ngIf="!isLoginPage"></app-navbar>
+        <router-outlet></router-outlet>
+    </main>
+</div>

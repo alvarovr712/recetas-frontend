@@ -1,0 +1,39 @@
+<nav class="sidebar">
+  <div class="logo-container">
+    <div class="logo-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M11 9H9V2H7V9H5V2H3V9C3 11.12 4.66 12.84 6.75 12.97V22H9.25V12.97C11.34 12.84 13 11.12 13 9V2H11V9ZM16 6V14H18.5V22H21V2C18.24 2 16 4.24 16 6Z"
+          fill="white" />
+      </svg>
+    </div>
+    <div class="logo-text">
+      <span class="brand-name">Sazón</span>
+      <span class="brand-subtitle">Recetas Premium</span>
+    </div>
+  </div>
+
+  <div class="menu-section">
+    <a *ngFor="let item of menuItems" [routerLink]="item.route" routerLinkActive="active" class="menu-item">
+      <span class="icon">
+        <i [class]="item.icon" style="font-size: 1.2rem;"></i>
+      </span>
+      <span class="label">{{ item.label }}</span>
+    </a>
+  </div>
+
+  <div class="bottom-section">
+    <div class="menu-label">CUENTA</div>
+    <!-- Configuración is now in the main menu lists, or can be kept separate. 
+         Based on my TS update, I put it in the list. I will remove the separate Config button -->
+
+    <div class="spacer"></div>
+
+    <button class="logout-btn" (click)="logout()">
+      <span class="icon">
+        <i class="bi bi-box-arrow-right" style="font-size: 1.2rem;"></i>
+      </span>
+      <span class="label">Cerrar sesión</span>
+    </button>
+  </div>
+</nav>

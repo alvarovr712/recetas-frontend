@@ -1,0 +1,54 @@
+/* Global Layout Styles */
+body,
+html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f8f9fa;
+    /* Light grey background for the content area */
+}
+
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* 
+   When sidebar is present, main-content needs margin.
+   Navbar width is 220px.
+*/
+.main-content {
+    flex: 1;
+    transition: margin-left 0.3s ease;
+}
+
+.main-content.with-sidebar {
+    margin-left: 220px;
+    padding: 2px;
+}
+
+@media (max-width: 768px) {
+    .main-content.with-sidebar {
+        margin-left: 0;
+        /* Full width on mobile */
+    }
+}
+
+/* Ensure box-sizing is handled correctly everywhere if not already */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Mobile Sidebar Backdrop */
+.sidebar-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+    /* Below sidebar (1100) but above everything else */
+}

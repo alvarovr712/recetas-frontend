@@ -1,0 +1,173 @@
+:host {
+    display: block;
+    height: 100vh;
+    width: 220px;
+    /* Reduced width */
+    background-color: #7c3aed;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1100;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    :host {
+        transform: translateX(-100%);
+        /* Hide by default on mobile */
+    }
+
+    :host.open {
+        transform: translateX(0);
+        /* Show when open */
+    }
+}
+
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 16px;
+    /* Reduced padding */
+    box-sizing: border-box;
+}
+
+/* Logo Section */
+.logo-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    /* Reduced margin */
+    gap: 10px;
+}
+
+.logo-icon {
+    width: 32px;
+    /* Reduced Logo size */
+    height: 32px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-name {
+    font-weight: 700;
+    font-size: 1rem;
+    /* Reduced font size */
+    line-height: 1.2;
+}
+
+.brand-subtitle {
+    font-size: 0.65rem;
+    /* Reduced font size */
+    opacity: 0.8;
+}
+
+/* Menu Items */
+.menu-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    /* Reduced gap */
+    margin-bottom: auto;
+    /* Pushes bottom section down */
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    /* Reduced padding */
+    border-radius: 8px;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.2s, transform 0.1s;
+    font-size: 0.85rem;
+    /* Reduced font size */
+    font-weight: 500;
+}
+
+.menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.menu-item.active {
+    background-color: rgb(139 92 246);
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon svg {
+    width: 18px;
+    /* Force smaller icons */
+    height: 18px;
+}
+
+/* Bottom Section */
+.bottom-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 16px;
+    /* Reduced padding */
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.menu-label {
+    font-size: 0.65rem;
+    /* Reduced font size */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.6;
+    margin-bottom: 6px;
+    padding-left: 12px;
+}
+
+.spacer {
+    flex: 1;
+}
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    /* Reduced padding */
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.2);
+    /* Slightly darker for contrast */
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+    /* Reduced font size */
+    font-weight: 500;
+    width: 100%;
+    margin-top: 16px;
+    transition: background-color 0.2s;
+    font-family: inherit;
+}
+
+.logout-btn:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+}
