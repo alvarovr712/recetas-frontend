@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { LoginRequest } from "../models/dtos/login-request.model";
+import { UserInfoDTO } from '../models/dtos/user-info-dto';
+
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +12,9 @@ import { LoginRequest } from "../models/dtos/login-request.model";
 export class AuthService {
 
   private readonly baseUrl = 'http://localhost:8080';
-  private currentUserSubject = new BehaviorSubject<{ username: string; role: string } | null>(null);
+  private currentUserSubject = new BehaviorSubject<UserInfoDTO | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
+
 
   constructor(private http: HttpClient) { }
 
@@ -22,8 +25,8 @@ export class AuthService {
     });
   }
 
-  getUserInfo(): Observable<{ username: string; role: string }> {
-    return this.http.get<{ username: string; role: string }>(
+  getUserInfo(): Observable<UserInfoDTO> {
+    return this.http.get<UserInfoDTO>(
       `${this.baseUrl}/auth/me`,
       { withCredentials: true }
     ).pipe(
@@ -33,19 +36,20 @@ export class AuthService {
     );
   }
 
+
   logout(): Observable<void> {
-  return this.http.post<void>(
-    `${this.baseUrl}/auth/logout`,
-    {}, 
-    {
-      withCredentials: true, 
-    }
-  ).pipe(
-    tap(() => {
-      this.currentUserSubject.next(null); 
-    })
-  );
-}
+    return this.http.post<void>(
+      `${this.baseUrl}/auth/logout`,
+      {},
+      {
+        withCredentials: true,
+      }
+    ).pipe(
+      tap(() => {
+        this.currentUserSubject.next(null);
+      })
+    );
+  }
 
 
 

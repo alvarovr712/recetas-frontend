@@ -4,6 +4,10 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from './services/auth.service';
 import { SidebarComponent } from './components/shared/sidebar/sidebar.component';
 import { NavbarComponent } from './components/shared/navbar/navbar.component';
+import { UserInfoDTO } from './models/dtos/user-info-dto';
+import { Role } from './models/enum/role';
+
+
 
 import { LayoutService } from './services/layout.service';
 
@@ -29,16 +33,16 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.authService.getUserInfo().subscribe({
       next: (user) => {
-        console.log('User info:', user);
         if (user && user.username) {
           if (this.router.url === '/login') {
-            if (user.role === 'ADMIN') {
-              this.router.navigate(['/dashboard']);
+            if (user.role === Role.ADMIN) {
+              this.router.navigate(['/admin/dashboard']);
             } else {
               this.router.navigate(['/recipes']);
             }
           }
         } else {
+
           this.router.navigate(['/login']);
         }
       },

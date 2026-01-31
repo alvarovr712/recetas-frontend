@@ -4,6 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { Route, Router } from '@angular/router';
+import { UserInfoDTO } from '../../../models/dtos/user-info-dto';
+import { Role } from '../../../models/enum/role';
+
 
 @Component({
   selector: 'app-login',
@@ -34,8 +37,9 @@ export class LoginComponent {
 
           // Fetch user info to decide where to redirect
           this.authService.getUserInfo().subscribe({
-            next: (user) => {
-              if (user.role === 'ADMIN') {
+            next: (user: UserInfoDTO) => {
+
+              if (user.role === Role.ADMIN) {
                 this.router.navigate(['/admin/dashboard']);
               } else {
                 this.router.navigate(['/recipes']);

@@ -3,7 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { LayoutService } from '../../../services/layout.service';
-import { Subscription } from 'rxjs';
+import { Subscription, map, Observable } from 'rxjs';
+import { UserInfoDTO } from '../../../models/dtos/user-info-dto';
+
+import { Role } from '../../../models/enum/role';
+
+
 
 
 @Component({
@@ -21,11 +26,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   @HostBinding('class.open') isOpen = false;
 
-  public currentUser: { username: string; role: string } | null = null;
-
   public adminMenu = [
     { label: 'Dashboard', icon: 'bi bi-speedometer2', route: '/admin/dashboard' },
-    { label: 'Recetas', icon: 'bi bi-journal-text', route: '/admin/recipes' },
+    { label: 'Recetas', icon: 'bi bi-grid', route: '/recipes' },
     { label: 'Mis Recetas', icon: 'bi bi-journal-album', route: '/admin/myrecipes' },
     { label: 'Favoritos', icon: 'bi bi-heart', route: '/admin/favorites' },
     { label: 'Configuración', icon: 'bi bi-gear', route: '/admin/config' }
@@ -37,22 +40,26 @@ export class SidebarComponent implements OnInit, OnDestroy {
     { label: 'Favoritos', icon: 'bi bi-heart', route: '/favorites' }
   ];
 
-  get menuItems() {
-    if (this.currentUser && this.currentUser.role === 'ADMIN') {
-      return this.adminMenu;
-    }
-    return this.userMenu;
+  public menuItems$: Observable<any[]>;
+
+
+  constructor() {
+    this.menuItems$ = this.authService.currentUser$.pipe(
+      map(user => {
+        if (user && user.role === Role.ADMIN) {
+          return this.adminMenu;
+        }
+        return this.userMenu;
+      })
+    );
   }
+
   ngOnInit() {
     this.sub = this.layoutService.sidebarOpen$.subscribe(open => {
       this.isOpen = open;
     });
-    this.sub.add(
-      this.authService.currentUser$.subscribe(user => {
-        this.currentUser = user;
-      })
-    );
   }
+
 
   ngOnDestroy() {
     this.sub.unsubscribe();
