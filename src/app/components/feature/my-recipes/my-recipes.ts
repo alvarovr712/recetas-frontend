@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RecipeGrid } from '../../shared/recipe-grid/recipe-grid';
+import { IngredientService } from '../../../services/ingredient.service';
+import { Ingredient } from '../../../models/ingredient.model';
 
 interface RecipeStep {
   id: number;
@@ -22,7 +24,10 @@ interface RecipeIngredient {
   templateUrl: './my-recipes.html',
   styleUrl: './my-recipes.css',
 })
-export class MyRecipes {
+export class MyRecipes implements OnInit {
+  private ingredientService = inject(IngredientService);
+  
+  availableIngredients: Ingredient[] = [];
   myRecipes = [
     {
       id: 1,
@@ -35,6 +40,17 @@ export class MyRecipes {
       isFavorite: true
     }
   ];
+
+  ngOnInit() {
+    this.ingredientService.buscarTodos().subscribe({
+      next: (data) => {
+        this.availableIngredients = data;
+      },
+      error: (err) => {
+        console.error('Error al cargar ingredientes', err);
+      }
+    });
+  }
 
   // Modal Logic
   isModalOpen = false;

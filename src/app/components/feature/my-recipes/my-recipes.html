@@ -47,12 +47,12 @@
                 <div class="mb-3">
                     <label class="form-label small fw-bold mb-1">Ingredientes</label>
                     <div class="row g-2 align-items-center">
-                        <div class="col-sm-5 col-12 position-relative">
-                            <i class="bi bi-search position-absolute text-muted" style="left: 1rem; top: 0.6rem;"></i>
-                            <input type="text" class="form-control bg-light border-0 custom-input rounded-3 ps-5" 
-                                placeholder="Buscar ingrediente..." 
-                                [(ngModel)]="newIngredientName" name="newIngredientName"
-                                (keydown.enter)="addIngredient($event)">
+                        <div class="col-sm-5 col-12">
+                            <select class="form-select bg-light border-0 custom-input rounded-3 text-muted" 
+                                [(ngModel)]="newIngredientName" name="newIngredientName">
+                                <option value="" disabled selected>Selecciona ingrediente</option>
+                                <option *ngFor="let ing of availableIngredients" [value]="ing.name">{{ ing.name }}</option>
+                            </select>
                         </div>
                         <div class="col-sm-3 col-4">
                             <input type="text" class="form-control bg-light border-0 custom-input rounded-3" 
