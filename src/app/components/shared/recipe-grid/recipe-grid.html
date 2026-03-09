@@ -1,0 +1,57 @@
+<div class="container-fluid px-4 py-3">
+    <!-- Search Header -->
+    <header class="mb-4">
+        <div class="search-bar shadow-sm">
+            <i class="bi bi-search"></i>
+            <input type="text" class="form-control border-0 shadow-none bg-transparent"
+                placeholder="Buscar recetas, ingredientes...">
+        </div>
+    </header>
+
+    <!-- Title Section -->
+    <section class="title-section mb-4 d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="display-6 fw-bold mb-1">{{ title }}</h1>
+            <p class="text-muted small mb-0">{{ description }}</p>
+        </div>
+        <!-- Slot for Extra Buttons (like "Nueva Receta") -->
+        <ng-content select="[extra-actions]"></ng-content>
+    </section>
+
+    <!-- Categories -->
+    <nav class="categories-nav d-flex flex-nowrap overflow-auto mb-4 pb-2 gap-2">
+        <button *ngFor="let cat of categories" class="btn btn-category btn-sm rounded-pill px-3 py-1 fw-bold"
+            [class.active]="selectedCategory === cat" (click)="selectCategory(cat)">
+            {{ cat }}
+        </button>
+    </nav>
+
+    <!-- Recipes Grid -->
+    <div class="row g-4 mb-5">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2" *ngFor="let recipe of filteredRecipes">
+            <div class="recipe-card shadow-sm border-0 h-100 overflow-hidden">
+                <div class="card-image-wrapper">
+                    <img [src]="recipe.image" class="w-100 h-100 object-fit-cover" [alt]="recipe.title">
+                    <span class="rating-badge small shadow-sm">
+                        <i class="bi bi-star-fill"></i>
+                        {{ recipe.rating }}
+                    </span>
+                    <button class="favorite-btn border-0 shadow-sm overflow-hidden"
+                        [class.is-favorite]="recipe.isFavorite">
+                        <i class="bi" [ngClass]="recipe.isFavorite ? 'bi-heart-fill' : 'bi-heart'"></i>
+                    </button>
+                </div>
+                <div class="card-body p-3">
+                    <span class="recipe-type fw-bold text-uppercase mb-1 d-block">{{ recipe.type }}</span>
+                    <h6 class="card-title fw-bold mb-2">{{ recipe.title }}</h6>
+                    <p class="card-text text-muted small mb-0 line-clamp-2">{{ recipe.description }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="explore-footer text-center py-4 border-top mt-auto">
+        <p class="text-muted small fw-bold mb-0 text-uppercase tracking-wider">© 2024 SAZÓN - TU COMPAÑERO CULINARIO</p>
+    </footer>
+</div>

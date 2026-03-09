@@ -1,0 +1,127 @@
+<app-recipe-grid 
+    title="Mis Recetas" 
+    description="Gestiona tus creaciones culinarias y comparte tus secretos."
+    [recipes]="myRecipes">
+    
+    <!-- Extra action button for this specific grid -->
+    <button extra-actions 
+        class="btn btn-new-recipe px-4 py-2 text-white fw-bold shadow-sm rounded-3 d-flex align-items-center gap-2" 
+        (click)="openModal()">
+        <i class="bi bi-plus-lg"></i> Nueva Receta
+    </button>
+</app-recipe-grid>
+
+<!-- Modal Overlay (Only in MyRecipes) -->
+<div class="modal-overlay d-flex justify-content-center align-items-center" *ngIf="isModalOpen">
+    <div class="recipe-modal bg-white rounded-4 shadow-lg d-flex flex-column">
+        <!-- Header -->
+        <div class="modal-header d-flex justify-content-between align-items-start p-4 pb-0 border-0">
+            <div>
+                <h3 class="fw-bold mb-1">Crear Nueva Receta</h3>
+                <p class="text-muted small mb-0">Comparte tu talento culinario con la comunidad.</p>
+            </div>
+            <button class="btn-close-modal bg-transparent border-0 text-muted" (click)="closeModal()">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <!-- Body -->
+        <div class="modal-body p-4 pt-3 overflow-y-auto">
+            <form>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold mb-1">Nombre de la receta</label>
+                        <input type="text" class="form-control bg-light border-0 custom-input rounded-3" 
+                            placeholder="Ej. Lasaña de Berenjena" [(ngModel)]="newRecipe.title" name="title">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold mb-1">Categoría</label>
+                        <select class="form-select bg-light border-0 custom-input rounded-3 text-muted" 
+                            [(ngModel)]="newRecipe.category" name="category">
+                            <option value="" disabled selected>Selecciona una categoría</option>
+                            <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold mb-1">Ingredientes</label>
+                    <div class="row g-2 align-items-center">
+                        <div class="col-sm-5 col-12 position-relative">
+                            <i class="bi bi-search position-absolute text-muted" style="left: 1rem; top: 0.6rem;"></i>
+                            <input type="text" class="form-control bg-light border-0 custom-input rounded-3 ps-5" 
+                                placeholder="Buscar ingrediente..." 
+                                [(ngModel)]="newIngredientName" name="newIngredientName"
+                                (keydown.enter)="addIngredient($event)">
+                        </div>
+                        <div class="col-sm-3 col-4">
+                            <input type="text" class="form-control bg-light border-0 custom-input rounded-3" 
+                                placeholder="Cant." 
+                                [(ngModel)]="newIngredientQty" name="newIngredientQty"
+                                (keydown.enter)="addIngredient($event)">
+                        </div>
+                        <div class="col-sm-3 col-5">
+                            <select class="form-select bg-light border-0 custom-input rounded-3 text-muted" 
+                                [(ngModel)]="newIngredientUnit" name="newIngredientUnit">
+                                <option *ngFor="let unit of units" [value]="unit">{{ unit | titlecase }}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-1 col-3 d-flex justify-content-end">
+                            <button class="btn btn-add-ingredient bg-brand text-white rounded-3 shadow-sm d-flex justify-content-center align-items-center w-100" 
+                                (click)="addIngredient()" type="button" style="height: 38px;">
+                                <i class="bi bi-plus-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Tags -->
+                    <div class="ingredients-tags d-flex flex-wrap gap-2 mt-3" *ngIf="newRecipe.ingredients.length > 0">
+                        <span class="ingredient-tag badge rounded-pill d-flex align-items-center gap-1 fw-bold" *ngFor="let ing of newRecipe.ingredients; let i = index">
+                            {{ ing.name }} 
+                            <span *ngIf="ing.quantity">- {{ ing.quantity }}</span> 
+                            <span *ngIf="ing.unit && ing.unit !== 'unidad'">{{ ing.unit }}</span>
+                            <i class="bi bi-x cursor-pointer ms-1 fs-6" (click)="removeIngredient(i)"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label small fw-bold mb-1">Descripción</label>
+                    <textarea class="form-control bg-light border-0 custom-input rounded-3" 
+                        rows="3" placeholder="Describe los pasos para preparar tu receta..."
+                        [(ngModel)]="newRecipe.description" name="description"></textarea>
+                </div>
+
+                <div class="steps-section">
+                    <label class="form-label small fw-bold mb-2">Pasos de Preparación</label>
+                    
+                    <div class="step-card border rounded-3 p-3 mb-3 position-relative" *ngFor="let step of newRecipe.steps; let i = index">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="step-badge fw-bold text-uppercase small">PASO {{ step.id }}</span>
+                            <button class="btn-delete-step border-0 bg-transparent text-muted p-0" (click)="removeStep(i)">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+                        </div>
+                        <textarea class="form-control border-light shadow-sm rounded-3 mb-2" rows="2" 
+                            placeholder="¿Qué hay que hacer en este paso?"
+                            [(ngModel)]="step.instruction" [name]="'step' + i"></textarea>
+                        
+                        <button class="btn-upload-image border border-secondary border-dashed border-1 border-opacity-25 bg-transparent rounded-3 px-3 py-1 mt-2 text-brand d-inline-flex gap-2 align-items-center small" type="button">
+                            <i class="bi bi-camera-fill"></i> Subir imagen del paso
+                        </button>
+                    </div>
+
+                    <button class="btn btn-add-step border border-dashed border-2 bg-transparent text-muted w-100 fw-bold py-2 rounded-3 d-flex justify-content-center align-items-center gap-2"
+                        (click)="addStep()" type="button">
+                        <i class="bi bi-plus-circle-fill"></i> Añadir Paso
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer border-0 p-4 pt-0 d-flex justify-content-end gap-3">
+            <button class="btn bg-transparent text-muted fw-bold" (click)="closeModal()">Cancelar</button>
+            <button class="btn btn-save-recipe px-4 text-white fw-bold rounded-3" (click)="saveRecipe()">Guardar Receta</button>
+        </div>
+    </div>
+</div>

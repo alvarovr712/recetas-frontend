@@ -28,14 +28,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   public adminMenu = [
     { label: 'Dashboard', icon: 'bi bi-speedometer2', route: '/admin/dashboard' },
-    { label: 'Recetas', icon: 'bi bi-grid', route: '/recipes' },
-    { label: 'Mis Recetas', icon: 'bi bi-journal-album', route: '/admin/myrecipes' },
-    { label: 'Favoritos', icon: 'bi bi-heart', route: '/admin/favorites' },
+    { label: 'Explorar', icon: 'bi bi-grid', route: '/recipes' },
+    { label: 'Mis Recetas', icon: 'bi bi-journal-album', route: '/my-recipes' },
+    { label: 'Favoritos', icon: 'bi bi-heart', route: '/favorites' },
     { label: 'Configuración', icon: 'bi bi-gear', route: '/admin/config' }
   ];
 
   public userMenu = [
-    { label: 'Recetas', icon: 'bi bi-grid', route: '/recipes' },
+    { label: 'Explorar', icon: 'bi bi-grid', route: '/recipes' },
     { label: 'Mis Recetas', icon: 'bi bi-book', route: '/my-recipes' },
     { label: 'Favoritos', icon: 'bi bi-heart', route: '/favorites' }
   ];

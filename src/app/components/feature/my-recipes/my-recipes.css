@@ -1,0 +1,125 @@
+/* Modal Specific Styles for MyRecipes */
+.btn-new-recipe {
+    background: #7c3aed;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-new-recipe:hover {
+    background: #6d28d9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3) !important;
+    color: white;
+}
+
+/* Modal Overlay Base */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1050;
+    backdrop-filter: blur(2px);
+}
+
+.recipe-modal {
+    width: 90%;
+    max-width: 650px;
+    max-height: 90vh;
+    overflow: hidden;
+}
+
+.btn-close-modal {
+    transition: transform 0.2s;
+}
+
+.btn-close-modal:hover {
+    transform: scale(1.1);
+    color: #333 !important;
+}
+
+.custom-input {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+}
+
+/* Ingredients Tags */
+.ingredient-tag {
+    background: #f3e8ff; 
+    color: #7c3aed;
+    padding: 0.4rem 0.8rem;
+    font-weight: 600;
+}
+
+.ingredient-tag i {
+    font-size: 1.1rem;
+    margin-left: 2px;
+}
+
+/* Steps */
+.step-badge {
+    color: #7c3aed;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.btn-delete-step {
+    transition: color 0.2s;
+}
+
+.btn-delete-step:hover i {
+    color: #dc3545;
+}
+
+.border-dashed {
+    border-style: dashed !important;
+}
+
+.text-brand {
+    color: #7c3aed !important;
+}
+
+.bg-brand {
+    background-color: #7c3aed !important;
+}
+
+.btn-upload-image {
+    transition: background 0.2s;
+}
+
+.btn-upload-image:hover {
+    background: #f8f9fa !important;
+}
+
+.btn-add-step {
+    transition: all 0.2s;
+}
+
+.btn-add-step:hover {
+    background: #f8f9fa !important;
+    border-color: #adb5bd !important;
+    color: #495057 !important;
+}
+
+/* Save Recipe Button */
+.btn-save-recipe {
+    background: #7c3aed;
+    transition: all 0.3s;
+}
+
+.btn-save-recipe:hover {
+    background: #6d28d9;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.btn-add-ingredient {
+    transition: all 0.2s ease;
+}
+
+.btn-add-ingredient:hover {
+    background-color: #6d28d9 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(124, 58, 237, 0.25) !important;
+}

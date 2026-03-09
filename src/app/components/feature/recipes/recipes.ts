@@ -1,30 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-interface Recipe {
-  id: number;
-  title: string;
-  category: string;
-  description: string;
-  rating: number;
-  image: string;
-  isFavorite: boolean;
-  type: string; // e.g., TRADICIONAL, MEXICANA
-}
+import { RecipeGrid } from '../../shared/recipe-grid/recipe-grid';
 
 @Component({
   selector: 'app-recipes',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RecipeGrid],
   templateUrl: './recipes.html',
   styleUrl: './recipes.css'
 })
 export class RecipesComponent implements OnInit {
 
-  categories = ['Todo', 'Desayuno', 'Plato Principal', 'Postres', 'Snacks'];
-  selectedCategory = 'Todo';
-
-  recipes: Recipe[] = [
+  recipes = [
     {
       id: 1,
       title: 'Paella de Marisco',
@@ -88,8 +75,4 @@ export class RecipesComponent implements OnInit {
   ];
 
   ngOnInit(): void { }
-
-  selectCategory(category: string) {
-    this.selectedCategory = category;
-  }
 }
