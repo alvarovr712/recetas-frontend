@@ -4,6 +4,8 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { LoginRequest } from "../models/dtos/login-request.model";
 import { UserInfoDTO } from '../models/dtos/user-info-dto';
+import { TokenInfoDTO } from '../models/dtos/token-info-dto';
+import { Token } from '@angular/compiler';
 
 
 @Injectable({
@@ -11,8 +13,8 @@ import { UserInfoDTO } from '../models/dtos/user-info-dto';
 })
 export class AuthService {
 
-  private readonly baseUrl = 'http://localhost:8080';
-  private currentUserSubject = new BehaviorSubject<UserInfoDTO | null>(null);
+  private readonly baseUrl = 'http://localhost:5036';
+  private currentUserSubject = new BehaviorSubject<TokenInfoDTO | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
 
@@ -25,13 +27,13 @@ export class AuthService {
     });
   }
 
-  getUserInfo(): Observable<UserInfoDTO> {
-    return this.http.get<UserInfoDTO>(
+  getUserInfo(): Observable<TokenInfoDTO> {
+    return this.http.get<TokenInfoDTO>(
       `${this.baseUrl}/auth/me`,
       { withCredentials: true }
     ).pipe(
-      tap(user => {
-        this.currentUserSubject.next(user);
+      tap(info => {
+        this.currentUserSubject.next(info);
       })
     );
   }

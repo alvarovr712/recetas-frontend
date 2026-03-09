@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Route, Router } from '@angular/router';
 import { UserInfoDTO } from '../../../models/dtos/user-info-dto';
 import { Role } from '../../../models/enum/role';
+import { TokenInfoDTO } from '../../../models/dtos/token-info-dto';
 
 
 @Component({
@@ -16,7 +17,7 @@ import { Role } from '../../../models/enum/role';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
-  private authService = inject(AuthService);
+  private authService = inject(AuthService);;
   private toastr = inject(ToastrService);
   private router = inject(Router);
   usernameOrEmail = '';
@@ -29,7 +30,7 @@ export class LoginComponent {
     this.loading = true;
 
     this.authService
-      .login({ usernameOrEmail: this.usernameOrEmail, password: this.password })
+      .login({ identifier: this.usernameOrEmail, password: this.password })
       .subscribe({
         next: (res) => {
           this.loading = false;
@@ -37,7 +38,7 @@ export class LoginComponent {
 
           // Fetch user info to decide where to redirect
           this.authService.getUserInfo().subscribe({
-            next: (user: UserInfoDTO) => {
+            next: (user: TokenInfoDTO) => {
 
               if (user.role === Role.ADMIN) {
                 this.router.navigate(['/admin/dashboard']);
