@@ -44,6 +44,49 @@
                     </div>
                 </div>
 
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold mb-1">Tiempo de preparación</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control bg-light border-0 custom-input rounded-start-3" 
+                                placeholder="45" [(ngModel)]="newRecipe.prepTime" name="prepTime">
+                            <span class="input-group-text bg-light border-0 text-muted small rounded-end-3">min</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold mb-1">Comensales</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control bg-light border-0 custom-input rounded-start-3" 
+                                placeholder="4" [(ngModel)]="newRecipe.servings" name="servings">
+                            <span class="input-group-text bg-light border-0 text-muted rounded-end-3">
+                                <i class="bi bi-people-fill"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold mb-1">Foto principal de la receta</label>
+                    <div class="photo-upload-zone rounded-3 d-flex flex-column align-items-center justify-content-center p-4 border border-dashed border-2 cursor-pointer position-relative"
+                        (click)="recipeImageInput.click()" [style.background-image]="recipeImageUrl ? 'url(' + recipeImageUrl + ')' : ''"
+                        [class.has-image]="recipeImageUrl">
+                        
+                        <input type="file" #recipeImageInput hidden (change)="onRecipeImageSelected($event)" accept="image/*">
+                        
+                        <div class="upload-content text-center" *ngIf="!recipeImageUrl">
+                            <div class="upload-icon-container mb-2">
+                                <i class="bi bi-camera-fill fs-2"></i>
+                            </div>
+                            <p class="fw-bold mb-0">Subir foto de la receta</p>
+                            <span class="text-muted smallest">Formatos: PNG, JPG o JPEG (Máx. 10MB)</span>
+                        </div>
+                        
+                        <div class="change-photo-overlay" *ngIf="recipeImageUrl">
+                            <i class="bi bi-camera-fill me-2"></i> Cambiar foto
+                        </div>
+                    </div>
+                </div>
+
                 <div class="mb-3">
                     <label class="form-label small fw-bold mb-1">Ingredientes</label>
                     <div class="row g-2 align-items-center">
@@ -115,9 +158,11 @@
                             placeholder="¿Qué hay que hacer en este paso?"
                             [(ngModel)]="step.instruction" [name]="'step' + i"></textarea>
                         
-                        <button class="btn-upload-image border border-secondary border-dashed border-1 border-opacity-25 bg-transparent rounded-3 px-3 py-1 mt-2 text-brand d-inline-flex gap-2 align-items-center small" type="button">
-                            <i class="bi bi-camera-fill"></i> Subir imagen del paso
+                        <button class="btn-upload-image border border-secondary border-dashed border-1 border-opacity-25 bg-transparent rounded-3 px-3 py-1 mt-2 text-brand d-inline-flex gap-2 align-items-center small" 
+                            type="button" (click)="stepImageInput.click()">
+                            <i class="bi bi-camera-fill"></i> {{ step.image ? 'Cambiar imagen' : 'Subir imagen del paso' }}
                         </button>
+                        <input type="file" #stepImageInput hidden (change)="onStepImageSelected($event, step)" accept="image/*">
                     </div>
 
                     <button class="btn btn-add-step border border-dashed border-2 bg-transparent text-muted w-100 fw-bold py-2 rounded-3 d-flex justify-content-center align-items-center gap-2"

@@ -15,7 +15,7 @@ export class IngredientService {
     constructor(private http: HttpClient) {}
 
    buscarTodos(): Observable<Ingredient[]>{
-    return this.http.get<Ingredient[]>(`${this.baseUrl}/ingredients`);
+    return this.http.get<Ingredient[]>(`${this.baseUrl}/ingredients`, {withCredentials: true});
    }
 
    crearIngrediente(nombre:string): Observable<Ingredient>{

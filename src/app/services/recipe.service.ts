@@ -10,7 +10,7 @@ import { CreateRecipeRequest } from '../models/dtos/create-recipe-request';
 @Injectable({
   providedIn: 'root'
 })
-export class IngredientService {
+export class RecipeService {
     private readonly baseUrl = 'http://localhost:5036/recipe';
 
     constructor(private http: HttpClient) {}
