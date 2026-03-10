@@ -1,9 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Observable, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RecipeGrid } from '../../shared/recipe-grid/recipe-grid';
 import { IngredientService } from '../../../services/ingredient.service';
 import { Ingredient } from '../../../models/ingredient.model';
+import { ToastrService } from 'ngx-toastr';
 
 interface RecipeStep {
   id: number;
@@ -26,8 +28,11 @@ interface RecipeIngredient {
 })
 export class MyRecipes implements OnInit {
   private ingredientService = inject(IngredientService);
+  private toastr = inject(ToastrService);
+  private cdr = inject(ChangeDetectorRef);
   
   availableIngredients: Ingredient[] = [];
+  isIngredientNewState = false;
   myRecipes = [
     {
       id: 1,
@@ -42,22 +47,41 @@ export class MyRecipes implements OnInit {
   ];
 
   ngOnInit() {
-    this.ingredientService.buscarTodos().subscribe({
+    this.loadIngredients().subscribe({
       next: (data) => {
         this.availableIngredients = data;
+        this.updateIngredientNewState();
       },
-      error: (err) => {
-        console.error('Error al cargar ingredientes', err);
-      }
+      error: (err) => console.error('Error inicial de carga', err)
     });
+  }
+
+  loadIngredients(): Observable<Ingredient[]> {
+    return this.ingredientService.buscarTodos();
   }
 
   // Modal Logic
   isModalOpen = false;
+  isCreatingIngredient = false;
   
   newIngredientName = '';
   newIngredientQty = '';
   newIngredientUnit = 'unidad';
+
+  updateIngredientNewState() {
+    const name = this.newIngredientName.trim().toLowerCase();
+    if (!name || this.isCreatingIngredient) {
+      this.isIngredientNewState = false;
+      return;
+    }
+    
+    const exists = this.availableIngredients.some(ing => {
+      const ingName = (ing.name || (ing as any).nombre || (ing as any).Name || (ing as any).Nombre || '').trim().toLowerCase();
+      return ingName === name;
+    });
+    
+    this.isIngredientNewState = !exists;
+  }
   
   units = ['pizca', 'gramos', 'ml', 'litros', 'cucharadas', 'tazas', 'unidad'];
 
@@ -98,6 +122,46 @@ export class MyRecipes implements OnInit {
       this.newIngredientName = '';
       this.newIngredientQty = '';
       this.newIngredientUnit = 'unidad';
+      this.updateIngredientNewState();
+    }
+  }
+
+  createNewIngredient() {
+    if (this.newIngredientName.trim() && !this.isCreatingIngredient) {
+      this.isCreatingIngredient = true;
+      this.ingredientService.crearIngrediente(this.newIngredientName.trim()).subscribe({
+        next: () => {
+          this.loadIngredients().subscribe({
+            next: (data) => {
+              // Defer state updates to next tick to avoid NG0100
+              setTimeout(() => {
+                this.availableIngredients = data;
+                this.isCreatingIngredient = false;
+                this.updateIngredientNewState();
+                this.toastr.success('Ingrediente creado correctamente', 'Éxito');
+                // Force detection as we are in a setTimeout
+                this.cdr.detectChanges();
+              });
+            },
+            error: (err) => {
+              console.error('Error al recargar', err);
+              this.isCreatingIngredient = false;
+              this.updateIngredientNewState();
+              this.cdr.detectChanges();
+            }
+          });
+        },
+        error: (err) => {
+          console.error('Error al crear ingrediente', err);
+          const errorMsg = err.error?.message || err.error || 'No se pudo crear el ingrediente';
+          setTimeout(() => {
+            this.toastr.error(errorMsg, 'Error');
+            this.isCreatingIngredient = false;
+            this.updateIngredientNewState();
+            this.cdr.detectChanges();
+          });
+        }
+      });
     }
   }
 

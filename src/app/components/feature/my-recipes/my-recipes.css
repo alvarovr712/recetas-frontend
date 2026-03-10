@@ -123,3 +123,46 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(124, 58, 237, 0.25) !important;
 }
+
+.btn-create-new-ing {
+    background-color: #7c3aed;
+    color: white;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    font-size: 1rem;
+    line-height: 1;
+    z-index: 5;
+    transition: all 0.2s;
+    border: none;
+}
+
+.btn-create-new-ing:hover {
+    background-color: #6d28d9;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 0 10px rgba(124, 58, 237, 0.4);
+}
+
+.ingredient-tag {
+    background: rgba(124, 58, 237, 0.1);
+    color: #7c3aed;
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease;
+    border-radius: 50px;
+}
+
+.ingredient-tag:hover {
+    background: rgba(124, 58, 237, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.ingredient-tag .bi-x {
+    transition: color 0.2s;
+    cursor: pointer;
+}
+
+.ingredient-tag .bi-x:hover {
+    color: #ef4444;
+}

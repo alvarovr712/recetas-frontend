@@ -18,6 +18,14 @@ export class IngredientService {
     return this.http.get<Ingredient[]>(`${this.baseUrl}/ingredients`);
    }
 
+   crearIngrediente(nombre:string): Observable<Ingredient>{
+    return this.http.post<Ingredient>(
+      `${this.baseUrl}/ingredients/crear`, {nombre}, {withCredentials:true}
+    )
+   }
+
+
+
 
 
 

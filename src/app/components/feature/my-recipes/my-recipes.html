@@ -48,11 +48,21 @@
                     <label class="form-label small fw-bold mb-1">Ingredientes</label>
                     <div class="row g-2 align-items-center">
                         <div class="col-sm-5 col-12">
-                            <select class="form-select bg-light border-0 custom-input rounded-3 text-muted" 
-                                [(ngModel)]="newIngredientName" name="newIngredientName">
-                                <option value="" disabled selected>Selecciona ingrediente</option>
-                                <option *ngFor="let ing of availableIngredients" [value]="ing.name">{{ ing.name }}</option>
-                            </select>
+                            <div class="position-relative">
+                                <input type="text" class="form-control bg-light border-0 custom-input rounded-3" 
+                                    [(ngModel)]="newIngredientName" name="newIngredientName" list="ingredientsList"
+                                    (ngModelChange)="updateIngredientNewState()"
+                                    autocomplete="off"
+                                    placeholder="Escribe o selecciona">
+                                <datalist id="ingredientsList">
+                                    <option *ngFor="let ing of availableIngredients" [value]="ing.name"></option>
+                                </datalist>
+                                <button *ngIf="isIngredientNewState" 
+                                    class="btn btn-create-new-ing position-absolute end-0 top-50 translate-middle-y me-2 rounded-circle d-flex align-items-center justify-content-center shadow-sm"
+                                    (click)="createNewIngredient()" title="Crear nuevo ingrediente" type="button">
+                                    <i class="bi bi-plus"></i>
+                                </button>
+                            </div>
                         </div>
                         <div class="col-sm-3 col-4">
                             <input type="text" class="form-control bg-light border-0 custom-input rounded-3" 
