@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { RecipeCard } from '../../../models/dtos/recipe-card';
 
 interface Recipe {
@@ -21,12 +22,18 @@ interface Recipe {
   styleUrl: './recipe-grid.css',
 })
 export class RecipeGrid {
+  private router = inject(Router);
+
   @Input() title: string = '';
   @Input() description: string = '';
   @Input() recipes: RecipeCard[] = [];
 
   categories = ['Todo', 'Desayuno', 'Plato Principal', 'Postres', 'Snacks'];
   selectedCategory = 'Todo';
+
+  goToDetail(id: string) {
+    this.router.navigate(['/recipe', id]);
+  }
 
   selectCategory(category: string) {
     this.selectedCategory = category;
