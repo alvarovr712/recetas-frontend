@@ -1,0 +1,20 @@
+<div class="confirm-overlay" *ngIf="isOpen">
+  <div class="confirm-box">
+
+    <!-- Icon -->
+    <div class="confirm-icon-wrap">
+      <i class="bi bi-bookmark-fill"></i>
+    </div>
+
+    <!-- Texts -->
+    <h5 class="confirm-title">{{ confirmText }}</h5>
+    <p class="confirm-subtitle">{{ message }}</p>
+
+    <!-- Actions -->
+    <div class="confirm-actions">
+      <button class="btn-cancel" (click)="onCancel()">{{ cancelText }}</button>
+      <button class="btn-confirm" (click)="onConfirm()">Confirmar</button>
+    </div>
+
+  </div>
+</div>

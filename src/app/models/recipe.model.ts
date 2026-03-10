@@ -7,4 +7,6 @@ export interface Recipe {
   prepTime: number;
   servings: number;
   image: string;
+  createdAt: string;      
+  updatedAt: string | null;
 }

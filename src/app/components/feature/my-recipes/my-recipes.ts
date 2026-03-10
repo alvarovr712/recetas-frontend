@@ -3,12 +3,14 @@ import { Observable, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RecipeGrid } from '../../shared/recipe-grid/recipe-grid';
+import { ConfirmModal } from '../../shared/confirm-modal/confirm-modal';
 import { IngredientService } from '../../../services/ingredient.service';
 import { Ingredient } from '../../../models/ingredient.model';
 import { ToastrService } from 'ngx-toastr';
 import { CreateRecipeRequest } from '../../../models/dtos/create-recipe-request';
 import { RecipeService } from '../../../services/recipe.service';
 import { ImageService } from '../../../services/image.service';
+import { RecipeCard } from '../../../models/dtos/recipe-card';
 
 interface RecipeStep {
   id: number;
@@ -25,7 +27,7 @@ interface RecipeIngredient {
 @Component({
   selector: 'app-my-recipes',
   standalone: true,
-  imports: [CommonModule, FormsModule, RecipeGrid],
+  imports: [CommonModule, FormsModule, RecipeGrid, ConfirmModal],
   templateUrl: './my-recipes.html',
   styleUrl: './my-recipes.css',
 })
@@ -39,18 +41,7 @@ export class MyRecipes implements OnInit {
   availableIngredients: Ingredient[] = [];
   isIngredientNewState = false;
   recipeImageUrl: string = '';
-  myRecipes = [
-    {
-      id: 1,
-      title: 'Paella de Marisco',
-      category: 'Plato Principal',
-      type: 'TRADICIONAL',
-      description: 'Mi versión especial de la paella valenciana.',
-      rating: 4.8,
-      image: 'recipes/paella.png',
-      isFavorite: true,
-    },
-  ];
+  myRecipes : RecipeCard[] = [];
 
   ngOnInit() {
     this.loadIngredients().subscribe({
@@ -60,7 +51,21 @@ export class MyRecipes implements OnInit {
       },
       error: (err) => console.error('Error inicial de carga', err),
     });
+     //Cargar recetas del usuario
+     
+    this.recipeService.getMisRecetas().subscribe({
+    next: (data) => {
+      this.myRecipes = data;
+      this.cdr.detectChanges();
+    },
+    error: (err) => {
+      console.error('Error cargando mis recetas', err);
+      this.toastr.error('No se pudieron cargar tus recetas');
+    }
+  });
   }
+ 
+
 
   loadIngredients(): Observable<Ingredient[]> {
     return this.ingredientService.buscarTodos();
@@ -68,6 +73,7 @@ export class MyRecipes implements OnInit {
 
   // Modal Logic
   isModalOpen = false;
+  isConfirmModalOpen = false;
   isCreatingIngredient = false;
 
   newIngredientName = '';
@@ -118,7 +124,19 @@ export class MyRecipes implements OnInit {
 
   closeModal() {
     this.isModalOpen = false;
+    this.isConfirmModalOpen = false;
     document.body.style.overflow = 'auto';
+    // Reset form for next time
+    this.newRecipe = {
+      title: '',
+      category: '',
+      prepTime: 30,
+      servings: 4,
+      ingredients: [],
+      description: '',
+      steps: [{ id: 1, instruction: '' }],
+    };
+    this.recipeImageUrl = '';
   }
 
   addIngredient(event?: Event) {
@@ -233,6 +251,12 @@ export class MyRecipes implements OnInit {
       this.toastr.error('Debes subir una imagen principal');
       return;
     }
+    // Show confirm modal instead of sending immediately
+    this.isConfirmModalOpen = true;
+  }
+
+  confirmSave() {
+    this.isConfirmModalOpen = false;
 
     const dto: CreateRecipeRequest = {
       title: this.newRecipe.title,
@@ -269,6 +293,11 @@ export class MyRecipes implements OnInit {
         });
       },
     });
+  }
+
+  cancelConfirm() {
+    // Just close the confirm modal, keep creation modal open with data
+    this.isConfirmModalOpen = false;
   }
 
   getIngredientIdByName(name: string): string {

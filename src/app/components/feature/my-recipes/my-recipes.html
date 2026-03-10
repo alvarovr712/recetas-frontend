@@ -180,3 +180,13 @@
         </div>
     </div>
 </div>
+
+<!-- Confirm Modal (appears above creation modal) -->
+<app-confirm-modal
+  [isOpen]="isConfirmModalOpen"
+  message="¿Estás seguro de que deseas crear la receta?"
+  confirmText="Crear receta"
+  cancelText="Cancelar"
+  (confirmed)="confirmSave()"
+  (cancelled)="cancelConfirm()">
+</app-confirm-modal>

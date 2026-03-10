@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RecipeCard } from '../../../models/dtos/recipe-card';
 
 interface Recipe {
   id: number;
@@ -22,7 +23,7 @@ interface Recipe {
 export class RecipeGrid {
   @Input() title: string = '';
   @Input() description: string = '';
-  @Input() recipes: Recipe[] = [];
+  @Input() recipes: RecipeCard[] = [];
 
   categories = ['Todo', 'Desayuno', 'Plato Principal', 'Postres', 'Snacks'];
   selectedCategory = 'Todo';

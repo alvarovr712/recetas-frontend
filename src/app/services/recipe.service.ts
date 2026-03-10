@@ -4,6 +4,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Ingredient } from '../models/ingredient.model';
 import { CreateRecipeRequest } from '../models/dtos/create-recipe-request';
+import { RecipeCard } from '../models/dtos/recipe-card';
 
 
 
@@ -17,6 +18,10 @@ export class RecipeService {
 
     crearReceta(request: CreateRecipeRequest): Observable<any>{
         return this.http.post(`${this.baseUrl}/crear`,request,{withCredentials:true});
+    }
+
+    getMisRecetas(): Observable<RecipeCard[]>{
+        return this.http.get<RecipeCard[]>(`${this.baseUrl}/mis-recetas`,{withCredentials:true});
     }
 
    
