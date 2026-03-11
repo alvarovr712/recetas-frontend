@@ -51,18 +51,20 @@ export class MyRecipes implements OnInit {
       },
       error: (err) => console.error('Error inicial de carga', err),
     });
-     //Cargar recetas del usuario
-     
+    this.loadMyRecipes();
+  }
+
+  loadMyRecipes() {
     this.recipeService.getMisRecetas().subscribe({
-    next: (data) => {
-      this.myRecipes = data;
-      this.cdr.detectChanges();
-    },
-    error: (err) => {
-      console.error('Error cargando mis recetas', err);
-      this.toastr.error('No se pudieron cargar tus recetas');
-    }
-  });
+      next: (data) => {
+        this.myRecipes = data;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error cargando mis recetas', err);
+        this.toastr.error('No se pudieron cargar tus recetas');
+      },
+    });
   }
  
 
@@ -115,7 +117,7 @@ export class MyRecipes implements OnInit {
     steps: [{ id: 1, instruction: '' }] as RecipeStep[],
   };
 
-  categories = ['Desayuno', 'Principal', 'Snacks', 'Postres'];
+  categories = ['Desayuno', 'Principal', 'Snack', 'Postre'];
 
   openModal() {
     this.isModalOpen = true;
@@ -137,6 +139,12 @@ export class MyRecipes implements OnInit {
       steps: [{ id: 1, instruction: '' }],
     };
     this.recipeImageUrl = '';
+    
+    // Limpiar campos individuales de ingrediente
+    this.newIngredientName = '';
+    this.newIngredientQty = '';
+    this.newIngredientUnit = 'unidad';
+    this.isIngredientNewState = false;
   }
 
   addIngredient(event?: Event) {
@@ -282,6 +290,7 @@ export class MyRecipes implements OnInit {
         setTimeout(() => {
           this.toastr.success('Receta creada correctamente');
           this.closeModal();
+          this.loadMyRecipes();
           this.cdr.detectChanges();
         });
       },

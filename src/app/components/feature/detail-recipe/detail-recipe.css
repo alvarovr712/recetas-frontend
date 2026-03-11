@@ -49,6 +49,11 @@
 .btn-favorite { right: 20px; }
 .btn-back:hover, .btn-favorite:hover { background: rgba(255,255,255,0.4); transform: scale(1.05); }
 
+.btn-favorite.is-favorite {
+  background: white;
+  color: #7c3aed;
+}
+
 .hero-info {
   position: absolute;
   bottom: 30px;

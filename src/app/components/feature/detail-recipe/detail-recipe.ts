@@ -59,4 +59,17 @@ export class DetailRecipe implements OnInit {
     };
     return map[type] ?? type;
   }
+
+  toggleFavorite() {
+    if (!this.recipe) return;
+    this.recipeService.toggleFavorite(this.recipe.id).subscribe({
+      next: (res) => {
+        if (this.recipe) {
+          this.recipe.isFavorite = res.favorite;
+          this.cdr.detectChanges();
+        }
+      },
+      error: (err) => console.error('Error toggling favorite', err),
+    });
+  }
 }

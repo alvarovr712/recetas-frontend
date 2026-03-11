@@ -7,8 +7,8 @@
       <button class="btn-back" (click)="goBack()">
         <i class="bi bi-arrow-left"></i>
       </button>
-      <button class="btn-favorite">
-        <i class="bi bi-heart"></i>
+      <button class="btn-favorite" [class.is-favorite]="recipe.isFavorite" (click)="toggleFavorite()">
+        <i class="bi" [ngClass]="recipe.isFavorite ? 'bi-heart-fill' : 'bi-heart'"></i>
       </button>
       <!-- Type badge + title over image -->
       <div class="hero-info">

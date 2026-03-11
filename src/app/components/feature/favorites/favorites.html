@@ -1,5 +1,6 @@
 <app-recipe-grid 
     title="Favoritos" 
     description="Tus recetas guardadas para cocinar en cualquier momento."
-    [recipes]="favoriteRecipes">
+    [recipes]="favoriteRecipes"
+    (favoriteToggled)="onFavoriteToggled($event)">
 </app-recipe-grid>

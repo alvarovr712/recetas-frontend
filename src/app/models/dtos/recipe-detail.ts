@@ -12,6 +12,7 @@ export interface RecipeDetailDto {
 
   ingredients: RecipeIngredientDto[];
   steps: RecipeStepDto[];
+  isFavorite: boolean;
 }
 
 export interface RecipeIngredientDto {
