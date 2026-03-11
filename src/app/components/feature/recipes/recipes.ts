@@ -35,4 +35,15 @@ export class RecipesComponent implements OnInit {
       error:(err) => console.error('Error cargando recetas',err)
     })
   }
+
+  onCategoryChanged(category: string) {
+  this.recipeService.getAllRecetas(category).subscribe({
+    next: (data) => {
+      this.recipes = data;
+      this.cdr.detectChanges();
+    },
+    error: (err) => console.error('Error filtrando recetas', err)
+  });
+}
+
 }

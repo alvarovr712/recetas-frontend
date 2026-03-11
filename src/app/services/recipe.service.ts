@@ -29,8 +29,17 @@ export class RecipeService {
     });
   }
 
-  getAllRecetas(): Observable<RecipeCard[]> {
-    return this.http.get<RecipeCard[]>(`${this.baseUrl}/all`, { withCredentials: true });
+  getAllRecetas(category?: string): Observable<RecipeCard[]> {
+    const params: any = {};
+
+    if (category && category !== 'Todo') {
+      params.category = category;
+    }
+
+    return this.http.get<RecipeCard[]>(`${this.baseUrl}/all`, {
+      params,
+      withCredentials: true,
+    });
   }
 
   toggleFavorite(recipeId: string) {

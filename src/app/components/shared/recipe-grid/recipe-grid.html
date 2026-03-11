@@ -21,8 +21,8 @@
     <!-- Categories -->
     <nav class="categories-nav d-flex flex-nowrap overflow-auto mb-4 pb-2 gap-2">
         <button *ngFor="let cat of categories" class="btn btn-category btn-sm rounded-pill px-3 py-1 fw-bold"
-            [class.active]="selectedCategory === cat" (click)="selectCategory(cat)">
-            {{ cat }}
+            [class.active]="selectedCategory === cat.value" (click)="selectCategory(cat.value)">
+            {{ cat.label }}
         </button>
     </nav>
 

@@ -21,10 +21,20 @@ export class RecipeGrid {
   @Input() description: string = '';
   @Input() recipes: RecipeCard[] = [];
   @Output() favoriteToggled = new EventEmitter<RecipeCard>();
+  @Output() categoryChanged = new EventEmitter<string>();
+
+
 
   private recipeService = inject(RecipeService);
 
-  categories = ['Todo', 'Desayuno', 'Plato Principal', 'Postres', 'Snacks'];
+  categories = [
+    { label: 'Todo', value: 'Todo' },
+    { label: 'Desayuno', value: 'Desayuno' },
+    { label: 'Plato Principal', value: 'Principal' },
+    { label: 'Postres', value: 'Postre' },
+    { label: 'Snacks', value: 'Snack' }
+  ];
+
   selectedCategory = 'Todo';
 
   goToDetail(id: string) {
@@ -33,13 +43,14 @@ export class RecipeGrid {
 
   selectCategory(category: string) {
     this.selectedCategory = category;
+    this.categoryChanged.emit(category);
   }
 
   get filteredRecipes() {
     if (this.selectedCategory === 'Todo') {
       return this.recipes;
     }
-    return this.recipes.filter(r => r.category === this.selectedCategory);
+    return this.recipes.filter(r => r.type === this.selectedCategory);
   }
   
   toggleFavorite(recipe: RecipeCard){
