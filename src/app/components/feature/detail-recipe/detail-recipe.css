@@ -145,17 +145,32 @@
    BODY LAYOUT
 ================================ */
 .detail-body {
-  display: flex;
-  gap: 80px; 
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  grid-template-areas: 
+    "ingredients description"
+    "ingredients steps";
+  column-gap: 60px;
+  row-gap: 40px;
   padding: 20px 0 60px;
+}
+
+.ingredients-panel {
+  grid-area: ingredients;
+}
+
+.description-panel {
+  grid-area: description;
+}
+
+.steps-panel {
+  grid-area: steps;
 }
 
 /* ==============================
    INGREDIENTS PANEL
 ================================ */
-.ingredients-panel {
-  flex: 0 0 320px;
-}
+/* Panel Styles Removed as they are handled by grid-area */
 
 .icon-box {
   background: #6c2fff;
@@ -211,15 +226,11 @@
 /* ==============================
    MAIN CONTENT
 ================================ */
-.main-content {
-  flex: 1;
-}
+/* Main Content Style Removed as it's replaced by panels */
 
 .content-section {
-  margin-bottom: 50px; /* More space between major sections */
-  max-width: 900px; /* Wider content area */
-  margin-left: auto;
-  margin-right: auto;
+  margin-bottom: 50px;
+  max-width: 95%;
 }
 
 .description-text {
@@ -279,7 +290,6 @@
 .step-image-container {
     margin-top: 15px;
     width: 100%;
-    max-width: 600px; /* Limit step image width */
     border-radius: 16px;
     overflow: hidden;
     background: #f8f9fa;
@@ -288,8 +298,8 @@
 .step-img {
   width: 100%;
   height: auto;
-  max-height: 400px; /* Tall but not excessive */
-  object-fit: contain; /* Ensure full image visibility */
+  max-height: 600px; /* Tall but not excessive */
+  object-fit: cover; /* Use cover to fill space better while maintaining aspect if possible */
   display: block;
 }
 
@@ -312,4 +322,37 @@
   border-radius: 10px;
   border: none;
   padding: 0.5rem 1.5rem;
+}
+
+/* ==============================
+   RESPONSIVE (MOBILE)
+================================ */
+@media (max-width: 992px) {
+  .detail-body {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .ingredients-panel {
+    order: 1;
+  }
+
+  .description-panel {
+    order: 2;
+  }
+
+  .steps-panel {
+    order: 3;
+  }
+
+  .content-section {
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .meta-container {
+    flex-direction: column;
+    gap: 15px;
+  }
 }

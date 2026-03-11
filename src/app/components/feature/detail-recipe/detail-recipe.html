@@ -47,7 +47,15 @@
     <!-- Body -->
     <div class="detail-body">
 
-      <!-- Left: Ingredients -->
+      <!-- Description Section -->
+      <section class="description-panel">
+        <div class="content-section">
+          <h3 class="section-title">Descripción</h3>
+          <p class="description-text">{{ recipe.description }}</p>
+        </div>
+      </section>
+
+      <!-- Ingredients Section -->
       <aside class="ingredients-panel">
         <h3 class="section-title">
           <span class="icon-box"><i class="bi bi-list-ul"></i></span>
@@ -61,13 +69,8 @@
         </div>
       </aside>
 
-      <!-- Right: Description + Steps -->
-      <section class="main-content">
-        <div class="content-section">
-          <h3 class="section-title">Descripción</h3>
-          <p class="description-text">{{ recipe.description }}</p>
-        </div>
-
+      <!-- Steps Section -->
+      <section class="steps-panel">
         <div class="content-section">
           <h3 class="section-title">Pasos de Preparación</h3>
           <div class="step-block" *ngFor="let step of recipe.steps">
