@@ -1,0 +1,130 @@
+:host {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  display: block;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* Left Panel Gradient */
+.left-panel {
+  background: #7a00ff;
+  background: linear-gradient(180deg, #8500ff 0%, #6a00cc 100%);
+  position: relative;
+}
+
+.logo-icon {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  padding: 1.5rem;
+  width: 120px;
+  height: 120px;
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.brand-icon-svg {
+  width: 70%;
+  height: 70%;
+}
+
+.brand-name {
+  font-size: 3.5rem;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  margin-bottom: 1rem;
+}
+
+.brand-tagline {
+  font-size: 1.25rem;
+  line-height: 1.5;
+  font-weight: 300;
+  opacity: 0.9;
+}
+
+/* Right Panel */
+.right-panel {
+  background-color: white;
+  /* Allows scroll if content is too large vertically */
+  overflow-y: auto;
+}
+
+.register-form-container {
+  max-width: 420px;
+}
+
+/* Base Form Control */
+.bg-light-soft {
+  background-color: #f8f9fa !important;
+}
+
+.input-group-text, .form-control {
+  border-color: #f1f3f5;
+  background-color: #f8f9fa;
+  font-size: 0.9rem;
+}
+
+.input-group-text {
+  padding-left: 1rem;
+}
+
+.form-control:focus {
+  border-color: #e9ecef;
+  background-color: white;
+  box-shadow: none;
+  border-left-color: transparent !important;
+}
+
+.input-group:focus-within .input-group-text {
+  background-color: white;
+  border-color: #e9ecef;
+}
+.input-group:focus-within .form-control {
+  background-color: white;
+  border-color: #e9ecef;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.text-brand {
+  color: #7a00ff !important;
+}
+
+.bg-brand {
+  background-color: #7a00ff !important;
+}
+
+.btn-primary {
+  background-color: #7a00ff;
+  border-color: #7a00ff;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: #6600cc !important;
+  border-color: #6600cc !important;
+  transform: translateY(-1px);
+}
+
+.text-primary {
+  color: #c9b0e9 !important;
+}
+
+.border-primary-subtle {
+  border-color: #e4d7f5 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .brand-name {
+    font-size: 2.5rem;
+  }
+}

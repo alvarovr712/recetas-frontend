@@ -4,6 +4,7 @@ export interface TokenInfoDTO {
 
     userId : number;
     username: string;
-    role: Role
-    expires: string 
+    role: Role;
+    image: string;
+    expires: string; 
 }

@@ -19,14 +19,14 @@ import { LayoutService } from './services/layout.service';
   styleUrl: './app.css',
 })
 export class AppComponent implements OnInit {
-  isLoginPage: boolean = false;
+  isAuthPage: boolean = false;
   private authService = inject(AuthService);
   private router = inject(Router);
   public layoutService = inject(LayoutService);
 
   constructor() {
     this.router.events.subscribe(() => {
-      this.isLoginPage = this.router.url === '/login';
+      this.isAuthPage = this.router.url.includes('/login') || this.router.url.includes('/register');
     });
   }
 
@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
     this.authService.getUserInfo().subscribe({
       next: (user) => {
         if (user && user.username) {
-          if (this.router.url === '/login') {
+          if (this.router.url.includes('/login') || this.router.url.includes('/register')) {
             if (user.role === Role.ADMIN) {
               this.router.navigate(['/admin/dashboard']);
             } else {
@@ -42,12 +42,13 @@ export class AppComponent implements OnInit {
             }
           }
         } else {
-
-          this.router.navigate(['/login']);
+          if (!this.router.url.includes('/register')) {
+            this.router.navigate(['/login']);
+          }
         }
       },
       error: () => {
-        if (this.router.url !== '/login') {
+        if (!this.router.url.includes('/login') && !this.router.url.includes('/register')) {
           this.router.navigate(['/login']);
         }
       },

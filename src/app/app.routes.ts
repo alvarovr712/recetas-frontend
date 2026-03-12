@@ -5,6 +5,7 @@ import { DashboardComponent } from './components/feature/dashboard/dashboard.com
 import { MyRecipes } from './components/feature/my-recipes/my-recipes';
 import { Favorites } from './components/feature/favorites/favorites';
 import { DetailRecipe } from './components/feature/detail-recipe/detail-recipe';
+import { RegisterComponent } from './components/feature/register/register.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -13,5 +14,6 @@ export const routes: Routes = [
     { path: 'my-recipes', component: MyRecipes },
     { path: 'favorites', component: Favorites },
     { path: 'recipe/:id', component: DetailRecipe },
-    { path: 'admin/dashboard', component: DashboardComponent }
+    { path: 'admin/dashboard', component: DashboardComponent },
+    { path: 'register', component: RegisterComponent }
 ];

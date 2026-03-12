@@ -1,0 +1,111 @@
+<div class="container-fluid vh-100 p-0 overflow-hidden">
+  <div class="row h-100 m-0">
+    <!-- Left Panel -->
+    <div class="col-md-6 col-lg-6 d-none d-md-flex left-panel p-0 justify-content-center align-items-center">
+      <div class="brand-content text-center text-white p-4">
+        <div class="logo-icon mb-4 mx-auto d-flex justify-content-center align-items-center">
+          <svg class="brand-icon-svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="white" fill="white" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M12 3c1.918 0 3.52 1.35 3.91 3.151a4 4 0 0 1 2.09 7.723l0 7.126h-12v-7.126a4 4 0 1 1 2.092 -7.723a4 4 0 0 1 3.908 -3.151z" />
+            <path d="M6.161 17.009l11.839 -.009" />
+          </svg>
+        </div>
+        <h1 class="brand-name display-4 fw-bold mb-3">Sazón</h1>
+        <p class="brand-tagline fs-5 fw-light opacity-75">
+          Únete a nuestra comunidad culinaria y<br />descubre el sabor de compartir.
+        </p>
+      </div>
+      
+      <div class="position-absolute bottom-0 start-0 w-50 p-4 d-flex justify-content-between text-white-50 small">
+        <span>&copy; 2024 Sazón Inc.</span>
+        <div class="footer-links-left d-flex gap-3">
+          <a href="#" class="text-decoration-none text-white-50">Privacidad</a>
+          <a href="#" class="text-decoration-none text-white-50">Términos</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="col-12 col-md-6 col-lg-6 right-panel bg-white d-flex justify-content-center align-items-center p-4 overflow-auto">
+      <div class="register-form-container w-100 my-auto py-4">
+        <div class="d-flex align-items-center mb-2">
+          <button routerLink="/login" class="btn btn-link text-dark p-0 me-3 border-0 text-decoration-none shadow-none" title="Volver al inicio de sesión">
+            <i class="bi bi-arrow-left fs-4"></i>
+          </button>
+          <h2 class="h3 fw-bold mb-0 text-dark">Crea tu cuenta</h2>
+        </div>
+        <p class="text-secondary mb-4 small">Comienza tu viaje gastronómico hoy mismo.</p>
+
+        <form class="register-form" (ngSubmit)="onRegister()">
+          <!-- Profile Photo Upload -->
+          <div class="d-flex flex-column align-items-center mb-4">
+            <div class="position-relative cursor-pointer" (click)="triggerFileInput()">
+              <div class="avatar-circle d-flex justify-content-center align-items-center overflow-hidden bg-light rounded-circle border border-2 border-primary-subtle" style="width: 80px; height: 80px; border-style: dashed !important;">
+                <img *ngIf="imagePreview" [src]="imagePreview" alt="Profile preview" class="w-100 h-100 object-fit-cover" />
+                <i *ngIf="!imagePreview" class="bi bi-person-fill text-primary" style="font-size: 2.5rem;"></i>
+              </div>
+              <div class="position-absolute bottom-0 end-0 bg-brand text-white rounded-circle d-flex justify-content-center align-items-center" style="width: 28px; height: 28px; transform: translate(10%, 10%); border: 2px solid white;">
+                <i class="bi bi-camera-fill small"></i>
+              </div>
+            </div>
+            <input type="file" id="fileUpload" class="d-none" accept="image/*" (change)="onFileSelected($event)">
+            <label class="form-label small fw-bold text-dark mt-2 mb-0">Foto de perfil</label>
+            <span class="small text-muted" style="font-size: 0.75rem;">Sube una foto para tu cuenta</span>
+          </div>
+
+          <div class="row gx-3 mb-3">
+            <div class="col-6">
+              <label for="name" class="form-label small fw-bold text-secondary mb-1">Nombre</label>
+              <input type="text" class="form-control form-control-sm bg-light-soft" id="name" placeholder="Tu nombre" [(ngModel)]="registerDto.name" name="name" required />
+            </div>
+            <div class="col-6">
+              <label for="surnames" class="form-label small fw-bold text-secondary mb-1">Apellidos</label>
+              <input type="text" class="form-control form-control-sm bg-light-soft" id="surnames" placeholder="Tus apellidos" [(ngModel)]="registerDto.surnames" name="surnames" required />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="username" class="form-label small fw-bold text-secondary mb-1">Nombre de usuario</label>
+            <div class="input-group input-group-sm">
+              <span class="input-group-text bg-light-soft border-end-0 text-muted"><i class="bi bi-at"></i></span>
+              <input type="text" class="form-control bg-light-soft border-start-0 ps-0" id="username" placeholder="usuario_sazon" [(ngModel)]="registerDto.username" name="username" required />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label small fw-bold text-secondary mb-1">Correo electrónico</label>
+            <div class="input-group input-group-sm">
+              <span class="input-group-text bg-light-soft border-end-0 text-muted"><i class="bi bi-envelope"></i></span>
+              <input type="email" class="form-control bg-light-soft border-start-0 ps-0" id="email" placeholder="tu@email.com" [(ngModel)]="registerDto.email" name="email" required />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label small fw-bold text-secondary mb-1">Contraseña</label>
+            <div class="input-group input-group-sm">
+              <span class="input-group-text bg-light-soft border-end-0 text-muted"><i class="bi bi-lock-fill"></i></span>
+              <input type="password" class="form-control bg-light-soft border-start-0 ps-0" id="password" placeholder="••••••••" [(ngModel)]="registerDto.password" name="password" required />
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label for="confirmPassword" class="form-label small fw-bold text-secondary mb-1">Confirmar Contraseña</label>
+            <div class="input-group input-group-sm">
+              <span class="input-group-text bg-light-soft border-end-0 text-muted"><i class="bi bi-shield-lock"></i></span>
+              <input type="password" class="form-control bg-light-soft border-start-0 ps-0" id="confirmPassword" placeholder="••••••••" [(ngModel)]="confirmPassword" name="confirmPassword" required />
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-sm w-100 fw-bold py-2 mb-4" [disabled]="loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Registrarse
+          </button>
+        </form>
+
+        <div class="text-center small text-secondary">
+          ¿Ya tienes una cuenta? <a routerLink="/login" class="text-decoration-none fw-bold text-brand">Inicia sesión</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

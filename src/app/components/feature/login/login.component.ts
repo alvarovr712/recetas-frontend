@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
-import { Route, Router } from '@angular/router';
+import { Route, Router, RouterModule } from '@angular/router';
 import { UserInfoDTO } from '../../../models/dtos/user-info-dto';
 import { Role } from '../../../models/enum/role';
 import { TokenInfoDTO } from '../../../models/dtos/token-info-dto';
@@ -12,7 +12,7 @@ import { TokenInfoDTO } from '../../../models/dtos/token-info-dto';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
