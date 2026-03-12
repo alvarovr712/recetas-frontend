@@ -8,48 +8,109 @@
     align-items: center;
     padding: 0 20px;
     background-color: #ffffff;
-    height: 50px;
-    /* Reduced even more */
-    border-bottom: 1px solid #e5e7eb;
-    box-sizing: border-box;
+    height: 60px;
+    border-bottom: 1px solid #edf2f7;
     position: sticky;
     top: 0;
     z-index: 1000;
-    width: 100%;
 }
 
 .spacer {
     flex: 1;
 }
 
-.profile-section {
+.user-profile {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
+    position: relative; /* Fixed: Base for dropdown positioning */
+}
+
+.username {
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 0.9rem;
+}
+
+.profile-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.2s;
+}
+
+.profile-avatar.clickable {
     cursor: pointer;
 }
 
-.profile-info {
+.profile-avatar.clickable:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(122, 0, 255, 0.2);
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: #f7fafc;
     display: flex;
     align-items: center;
-    /* Centered alignment since only one line now */
+    justify-content: center;
+    color: #a0aec0;
 }
 
-.profile-name {
-    font-weight: 600;
-    font-size: 0.75rem;
-    /* Smaller font */
-    color: #1f2937;
-    line-height: 1;
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 10px); /* Fixed: Position below avatar with gap */
+    right: 0;
+    z-index: 1001;
+    display: none; /* Default hidden */
+    border: none;
+    border-radius: 12px;
+    padding: 8px;
+    min-width: 180px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    background-color: white;
 }
 
-/* profile-role removed */
+.dropdown-menu.show {
+    display: block; /* Show when class added */
+}
 
-.profile-avatar svg {
-    display: block;
-    width: 28px;
-    /* Even smaller avatar */
-    height: 28px;
-    border-radius: 50%;
-    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+.dropdown-item {
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #4a5568;
+    cursor: pointer;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-item:hover {
+    background-color: #f4f0ff;
+    color: #7a00ff;
+}
+
+.dropdown-item i {
+    font-size: 1.1rem;
+}
+
+.dropdown-divider {
+    border-top: 1px solid #edf2f7;
+    margin: 4px 0;
 }

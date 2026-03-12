@@ -40,6 +40,12 @@ export class AuthService {
     );
   }
 
+  refreshCurrentUser(): void {
+    this.getUserInfo().subscribe({
+      error: (err) => console.error('Error refreshing user info:', err)
+    });
+  }
+
 
   logout(): Observable<void> {
     return this.http.post<void>(

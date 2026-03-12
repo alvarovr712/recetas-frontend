@@ -2,7 +2,7 @@ import { Role } from "../enum/role";
 
 export interface TokenInfoDTO {
 
-    userId : number;
+    userId : string;
     username: string;
     role: Role;
     image: string;

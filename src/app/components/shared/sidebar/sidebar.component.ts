@@ -27,17 +27,18 @@ export class SidebarComponent implements OnInit, OnDestroy {
   @HostBinding('class.open') isOpen = false;
 
   public adminMenu = [
-    { label: 'Dashboard', icon: 'bi bi-speedometer2', route: '/admin/dashboard' },
-    { label: 'Explorar', icon: 'bi bi-grid', route: '/recipes' },
+    { label: 'Inicio', icon: 'bi bi-grid', route: '/recipes' },
     { label: 'Mis Recetas', icon: 'bi bi-journal-album', route: '/my-recipes' },
     { label: 'Favoritos', icon: 'bi bi-heart', route: '/favorites' },
+    { label: 'Perfil', icon: 'bi bi-person', route: '/profile' },
     { label: 'Configuración', icon: 'bi bi-gear', route: '/admin/config' }
   ];
 
   public userMenu = [
-    { label: 'Explorar', icon: 'bi bi-grid', route: '/recipes' },
+    { label: 'Inicio', icon: 'bi bi-grid', route: '/recipes' },
     { label: 'Mis Recetas', icon: 'bi bi-book', route: '/my-recipes' },
-    { label: 'Favoritos', icon: 'bi bi-heart', route: '/favorites' }
+    { label: 'Favoritos', icon: 'bi bi-heart', route: '/favorites' },
+    { label: 'Perfil', icon: 'bi bi-person', route: '/profile' }
   ];
 
   public menuItems$: Observable<any[]>;

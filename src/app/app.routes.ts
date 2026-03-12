@@ -6,6 +6,7 @@ import { MyRecipes } from './components/feature/my-recipes/my-recipes';
 import { Favorites } from './components/feature/favorites/favorites';
 import { DetailRecipe } from './components/feature/detail-recipe/detail-recipe';
 import { RegisterComponent } from './components/feature/register/register.component';
+import { Profile } from './components/feature/profile/profile';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -15,5 +16,6 @@ export const routes: Routes = [
     { path: 'favorites', component: Favorites },
     { path: 'recipe/:id', component: DetailRecipe },
     { path: 'admin/dashboard', component: DashboardComponent },
-    { path: 'register', component: RegisterComponent }
+    { path: 'register', component: RegisterComponent },
+    { path: 'profile', component: Profile }
 ];

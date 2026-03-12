@@ -1,0 +1,190 @@
+.profile-container {
+    max-width: 1000px;
+}
+
+.fw-800 {
+    font-weight: 800;
+}
+
+.text-purple {
+    color: #7a00ff;
+}
+
+.btn-purple {
+    background: #7a00ff;
+    color: white;
+    border-radius: 12px;
+    font-weight: 700;
+    border: none;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(122, 0, 255, 0.3);
+}
+
+.btn-purple:hover {
+    background: #6a00e5;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(122, 0, 255, 0.4);
+    color: white;
+}
+
+/* Header & Avatar */
+.profile-avatar-large {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid white;
+}
+
+.profile-avatar-large-placeholder {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: #7a00ff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    font-weight: 800;
+    border: 4px solid white;
+}
+
+.edit-badge {
+    background: #7a00ff;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    font-size: 0.8rem;
+}
+
+/* Info Elements */
+.section-title {
+    font-weight: 800;
+    color: #2d3748;
+}
+
+.info-label {
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+    display: block;
+    font-size: 0.75rem;
+}
+
+.info-value {
+    font-weight: 600;
+    color: #2d3748;
+    padding: 6px 0;
+    border-bottom: 2px solid #f1f5f9;
+    font-size: 1rem;
+    transition: all 0.2s;
+    height: 38px;
+    display: flex;
+    align-items: center;
+}
+
+.info-value:hover {
+    border-bottom-color: #7a00ff;
+}
+
+.info-value-simple {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.avatar-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+/* Modal Custom */
+.modal-backdrop-custom {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 1040;
+}
+
+.modal-custom {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1050;
+    background: white;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 24px;
+    padding: 2rem;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.custom-input {
+    background: #f8fafc;
+    border: 1.5px solid #edf2f7;
+    border-radius: 12px;
+    padding: 10px 15px;
+    font-weight: 500;
+}
+
+.custom-input:focus {
+    background: white;
+    border-color: #7a00ff;
+    box-shadow: 0 0 0 4px rgba(122, 0, 255, 0.1);
+}
+
+.modal-header-custom h5 {
+    color: #2d3748;
+}
+
+/* Role Badge */
+.role-badge {
+    background: #f4f0ff;
+    color: #7a00ff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.8rem;
+}
+
+/* Stats Card */
+.stats-card {
+    background: linear-gradient(135deg, #7a00ff 0%, #a855f7 100%);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.stats-trend {
+    background: rgba(255, 255, 255, 0.2);
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+/* Responsive fixes */
+@media (max-width: 768px) {
+    .profile-container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}

@@ -17,20 +17,40 @@ import { environment } from '../../../../environments/environment';
 export class NavbarComponent implements OnInit {
     private authService = inject(AuthService);
     public layoutService = inject(LayoutService);
+    private router = inject(Router);
 
     user = {
-        name: 'Invitado', // Default name
-        role: '',
+        name: 'Invitado', 
         avatarUrl: ''
     };
+
+    showDropdown = false;
 
     ngOnInit() {
         this.authService.currentUser$.subscribe((userInfo: TokenInfoDTO | null) => {
             if (userInfo) {
                 this.user.name = userInfo.username;
                 this.user.avatarUrl = userInfo.image ? `${environment.apiUrl}${userInfo.image}` : '';
-                // this.user.role = userInfo.role; // Role removal requested previously
             }
+        });
+    }
+
+    toggleDropdown() {
+        this.showDropdown = !this.showDropdown;
+    }
+
+    goToProfile() {
+        this.showDropdown = false;
+        this.router.navigate(['/profile']);
+    }
+
+    logout() {
+        this.showDropdown = false;
+        this.authService.logout().subscribe({
+            next: () => {
+                this.router.navigate(['/login']);
+            },
+            error: (err) => console.error('Error logging out', err)
         });
     }
 }
