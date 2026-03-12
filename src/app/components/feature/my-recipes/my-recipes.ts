@@ -54,8 +54,8 @@ export class MyRecipes implements OnInit {
     this.loadMyRecipes();
   }
 
-  loadMyRecipes() {
-    this.recipeService.getMisRecetas().subscribe({
+  loadMyRecipes(category?: string) {
+    this.recipeService.getMisRecetas(category).subscribe({
       next: (data) => {
         this.myRecipes = data;
         this.cdr.detectChanges();
@@ -65,6 +65,10 @@ export class MyRecipes implements OnInit {
         this.toastr.error('No se pudieron cargar tus recetas');
       },
     });
+  }
+
+  onCategoryChanged(category: string) {
+    this.loadMyRecipes(category);
   }
  
 

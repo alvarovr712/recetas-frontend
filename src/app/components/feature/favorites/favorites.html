@@ -2,5 +2,8 @@
     title="Favoritos" 
     description="Tus recetas guardadas para cocinar en cualquier momento."
     [recipes]="favoriteRecipes"
-    (favoriteToggled)="onFavoriteToggled($event)">
+    searchMode="favorites"
+    (favoriteToggled)="onFavoriteToggled($event)"
+    (categoryChanged)="onCategoryChanged($event)"
+    (searchCleared)="loadFavorites()">
 </app-recipe-grid>

@@ -1,7 +1,9 @@
-<app-recipe-grid 
-    title="Explorar Recetas" 
-    description="Descubre nuevos sabores para tu mesa hoy."
-    [recipes]="recipes"
-    (categoryChanged)="onCategoryChanged($event)">
-    
+<app-recipe-grid
+  title="Explorar Recetas"
+  description="Descubre nuevos sabores para tu mesa hoy."
+  [recipes]="recipes"
+  searchMode="all"
+  (categoryChanged)="onCategoryChanged($event)"
+  (searchCleared)="loadRecipes()"
+>
 </app-recipe-grid>

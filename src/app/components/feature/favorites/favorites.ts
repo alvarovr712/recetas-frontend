@@ -22,8 +22,8 @@ export class Favorites {
 
   }
 
-  loadFavorites(){
-    this.recipeService.getFavoritas().subscribe({
+  loadFavorites(category?: string){
+    this.recipeService.getFavoritas(category).subscribe({
       next: (res) =>{
         this.favoriteRecipes = res;
         this.cdr.detectChanges();
@@ -32,6 +32,10 @@ export class Favorites {
         console.error("Error cargando recetas favoritas",err);
       }
     });
+  }
+
+  onCategoryChanged(category: string) {
+    this.loadFavorites(category);
   }
 
   onFavoriteToggled(recipe: RecipeCard) {

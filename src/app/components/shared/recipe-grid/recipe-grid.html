@@ -4,7 +4,8 @@
         <div class="search-bar shadow-sm">
             <i class="bi bi-search"></i>
             <input type="text" class="form-control border-0 shadow-none bg-transparent"
-                placeholder="Buscar recetas, ingredientes...">
+                placeholder="Buscar recetas, ingredientes..."
+                (input)="onSearch($event)">
         </div>
     </header>
 
@@ -28,7 +29,7 @@
 
     <!-- Recipes Grid -->
     <div class="row g-4 mb-5">
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2" *ngFor="let recipe of filteredRecipes">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2" *ngFor="let recipe of recipes">
             <div class="recipe-card shadow-sm border-0 h-100 overflow-hidden" (click)="goToDetail(recipe.id)" style="cursor: pointer;">
                 <div class="card-image-wrapper">
                     <img [src]="recipe.image" class="w-100 h-100 object-fit-cover" [alt]="recipe.title">
@@ -48,6 +49,6 @@
 
     <!-- Footer -->
     <footer class="explore-footer text-center py-4 border-top mt-auto">
-        <p class="text-muted small fw-bold mb-0 text-uppercase tracking-wider">© 2024 SAZÓN - TU COMPAÑERO CULINARIO</p>
+        <p class="text-muted small fw-bold mb-0 text-uppercase tracking-wider">© 2026 SAZÓN - TU COMPAÑERO CULINARIO</p>
     </footer>
 </div>

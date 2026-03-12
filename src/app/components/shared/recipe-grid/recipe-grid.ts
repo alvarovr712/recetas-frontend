@@ -4,8 +4,6 @@ import { Router } from '@angular/router';
 import { RecipeCard } from '../../../models/dtos/recipe-card';
 import { RecipeService } from '../../../services/recipe.service';
 
-
-
 @Component({
   selector: 'app-recipe-grid',
   standalone: true,
@@ -14,17 +12,18 @@ import { RecipeService } from '../../../services/recipe.service';
   styleUrl: './recipe-grid.css',
 })
 export class RecipeGrid {
-  private router = inject(Router);
-  private cdr = inject(ChangeDetectorRef);
+  filtro: string = '';
 
   @Input() title: string = '';
   @Input() description: string = '';
   @Input() recipes: RecipeCard[] = [];
   @Output() favoriteToggled = new EventEmitter<RecipeCard>();
   @Output() categoryChanged = new EventEmitter<string>();
+  @Output() searchCleared = new EventEmitter<void>();
+  @Input() searchMode: 'all' | 'myrecipes' | 'favorites' = 'all';
 
-
-
+  private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
   private recipeService = inject(RecipeService);
 
   categories = [
@@ -32,7 +31,7 @@ export class RecipeGrid {
     { label: 'Desayuno', value: 'Desayuno' },
     { label: 'Plato Principal', value: 'Principal' },
     { label: 'Postres', value: 'Postre' },
-    { label: 'Snacks', value: 'Snack' }
+    { label: 'Snacks', value: 'Snack' },
   ];
 
   selectedCategory = 'Todo';
@@ -46,24 +45,54 @@ export class RecipeGrid {
     this.categoryChanged.emit(category);
   }
 
-  get filteredRecipes() {
-    if (this.selectedCategory === 'Todo') {
-      return this.recipes;
-    }
-    return this.recipes.filter(r => r.type === this.selectedCategory);
-  }
-  
-  toggleFavorite(recipe: RecipeCard){
+  toggleFavorite(recipe: RecipeCard) {
     this.recipeService.toggleFavorite(recipe.id).subscribe({
-      next: (res) =>{
+      next: (res) => {
         recipe.isFavorite = res.favorite;
         this.recipes = [...this.recipes];
         this.cdr.detectChanges();
         this.favoriteToggled.emit(recipe);
       },
-      error: (err) =>{
-        console.error ("Error al cambiar favorito",err);
-      }
+      error: (err) => {
+        console.error('Error al cambiar favorito', err);
+      },
     });
+  }
+
+  onSearch(event: any) {
+    this.filtro = event.target.value;
+
+    // Si el filtro está vacío → avisar al padre para recargar recetas normales
+    if (this.filtro.trim().length === 0) {
+      this.searchCleared.emit();
+      return;
+    }
+
+    // Seleccionar el modo de búsqueda según el padre
+    if (this.searchMode === 'all') {
+      this.recipeService.searchRecetas(this.filtro).subscribe({
+        next: (data) => {
+          this.recipes = data;
+          this.cdr.detectChanges();
+        },
+        error: (err) => console.error('Error buscando recetas', err),
+      });
+    } else if (this.searchMode === 'myrecipes') {
+      this.recipeService.searchMisRecetas(this.filtro).subscribe({
+        next: (data) => {
+          this.recipes = data;
+          this.cdr.detectChanges();
+        },
+        error: (err) => console.error('Error buscando MIS recetas', err),
+      });
+    } else if (this.searchMode === 'favorites') {
+      this.recipeService.searchFavoritas(this.filtro).subscribe({
+        next: (data) => {
+          this.recipes = data;
+          this.cdr.detectChanges();
+        },
+        error: (err) => console.error('Error buscando favoritas', err),
+      });
+    }
   }
 }

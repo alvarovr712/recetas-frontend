@@ -19,8 +19,17 @@ export class RecipeService {
     return this.http.post(`${this.baseUrl}/crear`, request, { withCredentials: true });
   }
 
-  getMisRecetas(): Observable<RecipeCard[]> {
-    return this.http.get<RecipeCard[]>(`${this.baseUrl}/mis-recetas`, { withCredentials: true });
+  getMisRecetas(category?: string): Observable<RecipeCard[]> {
+    const params: any = {};
+
+    if (category && category !== 'Todo') {
+      params.category = category;
+    }
+
+    return this.http.get<RecipeCard[]>(`${this.baseUrl}/mis-recetas`, {
+      params,
+      withCredentials: true,
+    });
   }
 
   getRecipeDetail(id: string): Observable<RecipeDetailDto> {
@@ -49,8 +58,38 @@ export class RecipeService {
       { withCredentials: true },
     );
   }
-  getFavoritas() {
+  getFavoritas(category?: string) {
+    const params: any = {};
+
+    if (category && category !== 'Todo') {
+      params.category = category;
+    }
+
     return this.http.get<RecipeCard[]>(`${this.baseUrl}/favoritas`, {
+      params,
+      withCredentials: true,
+    });
+  }
+
+  searchRecetas(filtro: string): Observable<RecipeCard[]> {
+    const params = { filtro };
+
+    return this.http.get<RecipeCard[]>(`${this.baseUrl}/buscar`, {
+      params,
+      withCredentials: true,
+    });
+  }
+
+  searchMisRecetas(filtro: string): Observable<RecipeCard[]> {
+    return this.http.get<RecipeCard[]>(`${this.baseUrl}/mis-recetas/buscar`, {
+      params: { filtro },
+      withCredentials: true,
+    });
+  }
+
+  searchFavoritas(filtro: string): Observable<RecipeCard[]> {
+    return this.http.get<RecipeCard[]>(`${this.baseUrl}/favoritas/buscar`, {
+      params: { filtro },
       withCredentials: true,
     });
   }

@@ -9,41 +9,35 @@ import { RecipeService } from '../../../services/recipe.service';
   standalone: true,
   imports: [CommonModule, RecipeGrid],
   templateUrl: './recipes.html',
-  styleUrl: './recipes.css'
+  styleUrl: './recipes.css',
 })
 export class RecipesComponent implements OnInit {
-
-  recipes:RecipeCard[] =[];
-
+  recipes: RecipeCard[] = [];
 
   private recipeService = inject(RecipeService);
   private cdr = inject(ChangeDetectorRef);
 
-
-  ngOnInit(): void { 
-
+  ngOnInit(): void {
     this.loadRecipes();
   }
 
-
-  private loadRecipes():void{
+  loadRecipes(): void {
     this.recipeService.getAllRecetas().subscribe({
-      next:(data) => {
+      next: (data) => {
         this.recipes = data;
         this.cdr.detectChanges();
       },
-      error:(err) => console.error('Error cargando recetas',err)
-    })
+      error: (err) => console.error('Error cargando recetas', err),
+    });
   }
 
   onCategoryChanged(category: string) {
-  this.recipeService.getAllRecetas(category).subscribe({
-    next: (data) => {
-      this.recipes = data;
-      this.cdr.detectChanges();
-    },
-    error: (err) => console.error('Error filtrando recetas', err)
-  });
-}
-
+    this.recipeService.getAllRecetas(category).subscribe({
+      next: (data) => {
+        this.recipes = data;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error filtrando recetas', err),
+    });
+  }
 }
