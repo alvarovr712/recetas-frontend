@@ -7,11 +7,13 @@ import { CreateRecipeRequest } from '../models/dtos/create-recipe-request';
 import { RecipeCard } from '../models/dtos/recipe-card';
 import { RecipeDetailDto } from '../models/dtos/recipe-detail';
 
+import { environment } from '../../environments/environment';
+
 @Injectable({
   providedIn: 'root',
 })
 export class RecipeService {
-  private readonly baseUrl = 'http://localhost:5036/recipe';
+  private readonly baseUrl = `${environment.apiUrl}/recipe`;
 
   constructor(private http: HttpClient) {}
 

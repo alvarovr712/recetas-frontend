@@ -8,12 +8,14 @@ import { TokenInfoDTO } from '../models/dtos/token-info-dto';
 import { Token } from '@angular/compiler';
 
 
+import { environment } from '../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private readonly baseUrl = 'http://localhost:5036';
+  private readonly baseUrl = environment.apiUrl;
   private currentUserSubject = new BehaviorSubject<TokenInfoDTO | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 

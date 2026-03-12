@@ -7,11 +7,13 @@ import { CreateRecipeRequest } from '../models/dtos/create-recipe-request';
 
 
 
+import { environment } from '../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ImageService {
-    private readonly baseUrl = 'http://localhost:5036/images';
+    private readonly baseUrl = `${environment.apiUrl}/images`;
 
     constructor(private http: HttpClient) {}
 

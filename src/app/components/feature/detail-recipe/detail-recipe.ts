@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RecipeService } from '../../../services/recipe.service';
 import { RecipeDetailDto } from '../../../models/dtos/recipe-detail';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-detail-recipe',
@@ -31,6 +32,9 @@ export class DetailRecipe implements OnInit {
     this.recipeService.getRecipeDetail(id).subscribe({
       next: (data) => {
         setTimeout(() => {
+          if (data.userImage) {
+            data.userImage = `${environment.apiUrl}${data.userImage}`;
+          }
           this.recipe = data;
           this.isLoading = false;
           this.cdr.detectChanges();
