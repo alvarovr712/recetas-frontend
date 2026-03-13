@@ -95,4 +95,16 @@ export class RecipeService {
       withCredentials: true,
     });
   }
+
+  editarReceta(dto: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/editar`, dto, {
+      withCredentials: true,
+    });
+  }
+
+  eliminarReceta(id: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/${id}`, {
+      withCredentials: true,
+    });
+  }
 }

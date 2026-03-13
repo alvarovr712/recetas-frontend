@@ -142,3 +142,48 @@
 .explore-footer {
     border-color: #f1f3f5 !important;
 }
+
+/* Edit Actions */
+.edit-actions-container {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    z-index: 2;
+}
+
+.btn-action {
+    background: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-action:hover {
+    transform: scale(1.1);
+}
+
+.btn-edit i {
+    color: #7c3aed;
+    font-size: 0.8rem;
+}
+
+.btn-delete i {
+    color: #ef4444;
+    font-size: 0.8rem;
+}
+
+.btn-edit:hover {
+    background-color: #f3f0ff;
+}
+
+.btn-delete:hover {
+    background-color: #fef2f2;
+}

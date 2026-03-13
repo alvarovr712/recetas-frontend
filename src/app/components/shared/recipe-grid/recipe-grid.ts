@@ -17,10 +17,14 @@ export class RecipeGrid {
   @Input() title: string = '';
   @Input() description: string = '';
   @Input() recipes: RecipeCard[] = [];
+  @Input() searchMode: 'all' | 'myrecipes' | 'favorites' = 'all';
+  @Input() showEditActions: boolean = false;
+
   @Output() favoriteToggled = new EventEmitter<RecipeCard>();
   @Output() categoryChanged = new EventEmitter<string>();
   @Output() searchCleared = new EventEmitter<void>();
-  @Input() searchMode: 'all' | 'myrecipes' | 'favorites' = 'all';
+  @Output() editRequested = new EventEmitter<RecipeCard>();
+  @Output() deleteRequested = new EventEmitter<RecipeCard>();
 
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
@@ -94,5 +98,13 @@ export class RecipeGrid {
         error: (err) => console.error('Error buscando favoritas', err),
       });
     }
+  }
+
+  onEdit(recipe: RecipeCard) {
+    this.editRequested.emit(recipe);
+  }
+
+  onDelete(recipe: RecipeCard) {
+    this.deleteRequested.emit(recipe);
   }
 }

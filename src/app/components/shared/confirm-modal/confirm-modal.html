@@ -2,8 +2,8 @@
   <div class="confirm-box">
 
     <!-- Icon -->
-    <div class="confirm-icon-wrap">
-      <i class="bi bi-bookmark-fill"></i>
+    <div class="confirm-icon-wrap" [class.dangerous-icon]="isDangerous">
+      <i class="bi" [class.bi-bookmark-fill]="!isDangerous" [class.bi-trash-fill]="isDangerous"></i>
     </div>
 
     <!-- Texts -->

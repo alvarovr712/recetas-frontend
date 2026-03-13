@@ -33,6 +33,16 @@
             <div class="recipe-card shadow-sm border-0 h-100 overflow-hidden" (click)="goToDetail(recipe.id)" style="cursor: pointer;">
                 <div class="card-image-wrapper">
                     <img [src]="recipe.image" class="w-100 h-100 object-fit-cover" [alt]="recipe.title">
+                    
+                    <div class="edit-actions-container" *ngIf="showEditActions">
+                        <button class="btn-action btn-edit shadow-sm" (click)="onEdit(recipe); $event.stopPropagation()">
+                            <i class="bi bi-pencil-fill"></i>
+                        </button>
+                        <button class="btn-action btn-delete shadow-sm mt-2" (click)="onDelete(recipe); $event.stopPropagation()">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+                    </div>
+
                     <button class="favorite-btn border-0 shadow-sm overflow-hidden"
                         [class.is-favorite]="recipe.isFavorite" (click)="toggleFavorite(recipe); $event.stopPropagation()">
                         <i class="bi" [ngClass]="recipe.isFavorite ? 'bi-heart-fill' : 'bi-heart'"></i>

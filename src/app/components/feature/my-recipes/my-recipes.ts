@@ -11,6 +11,7 @@ import { CreateRecipeRequest } from '../../../models/dtos/create-recipe-request'
 import { RecipeService } from '../../../services/recipe.service';
 import { ImageService } from '../../../services/image.service';
 import { RecipeCard } from '../../../models/dtos/recipe-card';
+import { RecipeIngredientDto, RecipeStepDto } from '../../../models/dtos/recipe-detail';
 
 interface RecipeStep {
   id: number;
@@ -19,6 +20,7 @@ interface RecipeStep {
 }
 
 interface RecipeIngredient {
+  ingredientId?: string;
   name: string;
   quantity: string;
   unit: string;
@@ -42,6 +44,20 @@ export class MyRecipes implements OnInit {
   isIngredientNewState = false;
   recipeImageUrl: string = '';
   myRecipes : RecipeCard[] = [];
+  uploadedImagesThisSession: string[] = [];
+
+  // Modal Logic
+  isModalOpen = false;
+  isConfirmModalOpen = false;
+  isDeleteConfirmModalOpen = false;
+  isCreatingIngredient = false;
+  isEditing = false;
+  editingRecipeId: string | null = null;
+  recipeToDelete: RecipeCard | null = null;
+
+  newIngredientName = '';
+  newIngredientQty = '';
+  newIngredientUnit = 'unidad';
 
   ngOnInit() {
     this.loadIngredients().subscribe({
@@ -70,21 +86,10 @@ export class MyRecipes implements OnInit {
   onCategoryChanged(category: string) {
     this.loadMyRecipes(category);
   }
- 
-
 
   loadIngredients(): Observable<Ingredient[]> {
     return this.ingredientService.buscarTodos();
   }
-
-  // Modal Logic
-  isModalOpen = false;
-  isConfirmModalOpen = false;
-  isCreatingIngredient = false;
-
-  newIngredientName = '';
-  newIngredientQty = '';
-  newIngredientUnit = 'unidad';
 
   updateIngredientNewState() {
     const name = this.newIngredientName.trim().toLowerCase();
@@ -128,47 +133,252 @@ export class MyRecipes implements OnInit {
     document.body.style.overflow = 'hidden';
   }
 
+  onEditRecipe(recipe: RecipeCard) {
+    this.recipeService.getRecipeDetail(recipe.id).subscribe({
+      next: (detail) => {
+        setTimeout(() => {
+          this.isEditing = true;
+          this.editingRecipeId = recipe.id;
+          this.recipeImageUrl = detail.image;
+
+          this.newRecipe = {
+            title: detail.title,
+            category: detail.type,
+            prepTime: detail.prepTime,
+            servings: detail.servings,
+            description: detail.description,
+            ingredients: detail.ingredients.map((ing: RecipeIngredientDto) => ({
+              ingredientId: ing.ingredientId,
+              name: ing.name,
+              quantity: ing.quantity,
+              unit: ing.unit,
+            })),
+            steps: detail.steps.map((step: RecipeStepDto, index: number) => ({
+              id: index + 1,
+              instruction: step.instruction,
+              image: step.image,
+            })),
+          };
+          this.openModal();
+          this.cdr.detectChanges();
+        }, 0);
+      },
+      error: (err) => {
+        console.error(err);
+        this.toastr.error('No se pudo cargar el detalle de la receta');
+      },
+    });
+  }
+
   closeModal() {
-    this.isModalOpen = false;
-    this.isConfirmModalOpen = false;
     document.body.style.overflow = 'auto';
-    // Reset form for next time
+    setTimeout(() => {
+      this.isModalOpen = false;
+      this.isEditing = false;
+      this.editingRecipeId = null;
+      this.resetForm();
+      this.cdr.detectChanges();
+    }, 0);
+  }
+
+  resetForm() {
+    // Clean up temporary images that weren't saved
+    this.uploadedImagesThisSession.forEach(url => {
+      this.imageService.deleteImage(url).subscribe();
+    });
+    this.uploadedImagesThisSession = [];
+
     this.newRecipe = {
       title: '',
       category: '',
       prepTime: 30,
       servings: 4,
-      ingredients: [],
+      ingredients: [] as RecipeIngredient[],
       description: '',
       steps: [{ id: 1, instruction: '' }],
     };
     this.recipeImageUrl = '';
-    
-    // Limpiar campos individuales de ingrediente
     this.newIngredientName = '';
     this.newIngredientQty = '';
-    this.newIngredientUnit = 'unidad';
-    this.isIngredientNewState = false;
+  }
+
+  onRecipeImageSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.imageService.uploadImage(file).subscribe({
+        next: (res) => {
+          // If we had a previous temporary image, delete it
+          if (this.recipeImageUrl && this.uploadedImagesThisSession.includes(this.recipeImageUrl)) {
+            this.imageService.deleteImage(this.recipeImageUrl).subscribe();
+            this.uploadedImagesThisSession = this.uploadedImagesThisSession.filter(u => u !== this.recipeImageUrl);
+          }
+          this.recipeImageUrl = res.url;
+          this.uploadedImagesThisSession.push(res.url);
+          this.cdr.detectChanges();
+          this.toastr.success('Imagen subida correctamente');
+        },
+        error: () => this.toastr.error('Error al subir la imagen'),
+      });
+    }
   }
 
   addIngredient(event?: Event) {
-    if (event) {
-      event.preventDefault();
-    }
-    if (this.newIngredientName.trim() !== '') {
-      const ingredientToAdd: RecipeIngredient = {
-        name: this.newIngredientName.trim(),
-        quantity: this.newIngredientQty.trim(),
-        unit: this.newIngredientUnit,
-      };
+    if (event) event.preventDefault();
+    if (!this.newIngredientName.trim()) return;
 
-      this.newRecipe.ingredients.push(ingredientToAdd);
+    this.newRecipe.ingredients.push({
+      name: this.newIngredientName.trim(),
+      quantity: this.newIngredientQty,
+      unit: this.newIngredientUnit,
+      ingredientId: this.getIngredientIdByName(this.newIngredientName.trim()),
+    });
 
-      this.newIngredientName = '';
-      this.newIngredientQty = '';
-      this.newIngredientUnit = 'unidad';
-      this.updateIngredientNewState();
+    this.newIngredientName = '';
+    this.newIngredientQty = '';
+    this.updateIngredientNewState();
+  }
+
+  removeIngredient(index: number) {
+    this.newRecipe.ingredients.splice(index, 1);
+  }
+
+  addStep() {
+    const nextId = this.newRecipe.steps.length + 1;
+    this.newRecipe.steps.push({ id: nextId, instruction: '' });
+  }
+
+  removeStep(index: number) {
+    const step = this.newRecipe.steps[index];
+    if (step.image && this.uploadedImagesThisSession.includes(step.image)) {
+      this.imageService.deleteImage(step.image).subscribe();
+      this.uploadedImagesThisSession = this.uploadedImagesThisSession.filter(u => u !== step.image);
     }
+    this.newRecipe.steps.splice(index, 1);
+    // Recalculate IDs
+    this.newRecipe.steps.forEach((step, i) => (step.id = i + 1));
+  }
+
+  onStepImageSelected(event: any, step: RecipeStep) {
+    const file = event.target.files[0];
+    if (file) {
+      this.imageService.uploadImage(file).subscribe({
+        next: (res) => {
+          // If the step had a previous temporary image, delete it
+          if (step.image && this.uploadedImagesThisSession.includes(step.image)) {
+            this.imageService.deleteImage(step.image).subscribe();
+            this.uploadedImagesThisSession = this.uploadedImagesThisSession.filter(u => u !== step.image);
+          }
+          step.image = res.url;
+          this.uploadedImagesThisSession.push(res.url);
+          this.cdr.detectChanges();
+          this.toastr.success('Imagen del paso subida');
+        },
+        error: () => this.toastr.error('Error al subir imagen del paso'),
+      });
+    }
+  }
+
+  saveRecipe() {
+    if (!this.recipeImageUrl) {
+      this.toastr.error('Debes subir una imagen principal');
+      return;
+    }
+    this.isConfirmModalOpen = true;
+  }
+
+  confirmSave() {
+    setTimeout(() => {
+      this.isConfirmModalOpen = false;
+      this.cdr.detectChanges();
+    }, 0);
+
+    const dto: any = {
+      title: this.newRecipe.title,
+      description: this.newRecipe.description,
+      type: this.newRecipe.category,
+      prepTime: Number(this.newRecipe.prepTime),
+      servings: Number(this.newRecipe.servings),
+      image: this.recipeImageUrl,
+      ingredients: this.newRecipe.ingredients.map((ing) => ({
+        ingredientId: ing.ingredientId || this.getIngredientIdByName(ing.name),
+        quantity: ing.quantity,
+        unit: ing.unit,
+      })),
+      steps: this.newRecipe.steps.map((step, index) => ({
+        stepOrder: index + 1,
+        instruction: step.instruction,
+        imageStep: step.image || '',
+      })),
+    };
+
+    if (this.isEditing && this.editingRecipeId) {
+      dto.id = this.editingRecipeId;
+      this.recipeService.editarReceta(dto).subscribe({
+        next: () => {
+          this.toastr.success('Receta actualizada correctamente');
+          this.uploadedImagesThisSession = []; // They are saved now, don't clean up
+          this.closeModal();
+          this.loadMyRecipes();
+        },
+        error: (err) => {
+          console.error(err);
+          this.toastr.error('Error al editar la receta');
+        },
+      });
+    } else {
+      this.recipeService.crearReceta(dto).subscribe({
+        next: () => {
+          this.toastr.success('Receta creada correctamente');
+          this.uploadedImagesThisSession = []; // They are saved now, don't clean up
+          this.closeModal();
+          this.loadMyRecipes();
+        },
+        error: (err) => {
+          console.error(err);
+          this.toastr.error('Error al crear la receta');
+        },
+      });
+    }
+  }
+
+  onDeleteRecipe(recipe: RecipeCard) {
+    this.recipeToDelete = recipe;
+    this.isDeleteConfirmModalOpen = true;
+  }
+
+  confirmDelete() {
+    if (this.recipeToDelete) {
+      this.recipeService.eliminarReceta(this.recipeToDelete.id).subscribe({
+        next: () => {
+          this.toastr.success('Receta eliminada correctamente');
+          setTimeout(() => {
+            this.isDeleteConfirmModalOpen = false;
+            this.recipeToDelete = null;
+            this.loadMyRecipes();
+            this.cdr.detectChanges();
+          }, 0);
+        },
+        error: (err) => {
+          console.error(err);
+          this.toastr.error('Error al eliminar la receta');
+        }
+      });
+    }
+  }
+
+  cancelDelete() {
+    setTimeout(() => {
+      this.isDeleteConfirmModalOpen = false;
+      this.recipeToDelete = null;
+      this.cdr.detectChanges();
+    }, 0);
+  }
+
+  cancelConfirm() {
+    setTimeout(() => {
+      this.isConfirmModalOpen = false;
+      this.cdr.detectChanges();
+    }, 0);
   }
 
   createNewIngredient() {
@@ -178,20 +388,17 @@ export class MyRecipes implements OnInit {
         next: () => {
           this.loadIngredients().subscribe({
             next: (data) => {
-              // Defer state updates to next tick to avoid NG0100
               setTimeout(() => {
                 this.availableIngredients = data;
                 this.isCreatingIngredient = false;
                 this.updateIngredientNewState();
                 this.toastr.success('Ingrediente creado correctamente', 'Éxito');
-                // Force detection as we are in a setTimeout
                 this.cdr.detectChanges();
               });
             },
             error: (err) => {
               console.error('Error al recargar', err);
               this.isCreatingIngredient = false;
-              this.updateIngredientNewState();
               this.cdr.detectChanges();
             },
           });
@@ -199,122 +406,16 @@ export class MyRecipes implements OnInit {
         error: (err) => {
           console.error('Error al crear ingrediente', err);
           const errorMsg = err.error?.message || err.error || 'No se pudo crear el ingrediente';
-          setTimeout(() => {
-            this.toastr.error(errorMsg, 'Error');
-            this.isCreatingIngredient = false;
-            this.updateIngredientNewState();
-            this.cdr.detectChanges();
-          });
+          this.toastr.error(errorMsg, 'Error');
+          this.isCreatingIngredient = false;
+          this.cdr.detectChanges();
         },
       });
     }
   }
 
-  removeIngredient(index: number) {
-    this.newRecipe.ingredients.splice(index, 1);
-  }
-
-  addStep() {
-    const nextId =
-      this.newRecipe.steps.length > 0 ? Math.max(...this.newRecipe.steps.map((s) => s.id)) + 1 : 1;
-    this.newRecipe.steps.push({ id: nextId, instruction: '' });
-  }
-
-  removeStep(index: number) {
-    this.newRecipe.steps.splice(index, 1);
-  }
-
-  //SUBIR IMAGENES Y QUE NOS DEVUELVA LA URL
-
-  onRecipeImageSelected(event: any) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  this.imageService.uploadImage(file).subscribe({
-    next: (res) => {
-      this.recipeImageUrl = res.url;
-      this.cdr.detectChanges(); // ← evita NG0100
-      this.toastr.success('Imagen subida correctamente');
-    },
-    error: () => {
-      this.toastr.error('Error al subir la imagen');
-    },
-  });
-}
-
-  onStepImageSelected(event: any, step: RecipeStep) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  this.imageService.uploadImage(file).subscribe({
-    next: (res) => {
-      step.image = res.url;
-      this.cdr.detectChanges(); // ← evita NG0100
-      this.toastr.success('Imagen del paso subida');
-    },
-    error: () => {
-      this.toastr.error('Error al subir imagen del paso');
-    },
-  });
-}
-
-  saveRecipe() {
-    if (!this.recipeImageUrl) {
-      this.toastr.error('Debes subir una imagen principal');
-      return;
-    }
-    // Show confirm modal instead of sending immediately
-    this.isConfirmModalOpen = true;
-  }
-
-  confirmSave() {
-    this.isConfirmModalOpen = false;
-
-    const dto: CreateRecipeRequest = {
-      title: this.newRecipe.title,
-      description: this.newRecipe.description,
-      type: this.newRecipe.category,
-      prepTime: Number(this.newRecipe.prepTime),
-      servings: Number(this.newRecipe.servings),
-      image: this.recipeImageUrl,
-      ingredients: this.newRecipe.ingredients.map((ing) => ({
-        ingredientId: this.getIngredientIdByName(ing.name),
-        quantity: Number(ing.quantity),
-        unit: ing.unit,
-      })),
-      recipeSteps: this.newRecipe.steps.map((step, index) => ({
-        stepOrder: index + 1,
-        instruction: step.instruction,
-        imageStep: step.image ?? '',
-      })),
-    };
-
-    this.recipeService.crearReceta(dto).subscribe({
-      next: () => {
-        setTimeout(() => {
-          this.toastr.success('Receta creada correctamente');
-          this.closeModal();
-          this.loadMyRecipes();
-          this.cdr.detectChanges();
-        });
-      },
-      error: (err) => {
-        console.error(err);
-        setTimeout(() => {
-          this.toastr.error('Error al crear la receta');
-          this.cdr.detectChanges();
-        });
-      },
-    });
-  }
-
-  cancelConfirm() {
-    // Just close the confirm modal, keep creation modal open with data
-    this.isConfirmModalOpen = false;
-  }
-
   getIngredientIdByName(name: string): string {
-    const ing = this.availableIngredients.find((i) => i.name === name);
+    const ing = this.availableIngredients.find((i) => (i.name || (i as any).nombre) === name);
     return ing ? ing.id : '';
   }
 }

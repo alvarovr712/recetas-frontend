@@ -35,9 +35,17 @@
   margin-bottom: 1rem;
 }
 
+.confirm-icon-wrap.dangerous-icon {
+  background: #ffe9e9;
+}
+
 .confirm-icon-wrap i {
   font-size: 1.4rem;
   color: #6c2fff;
+}
+
+.confirm-icon-wrap.dangerous-icon i {
+  color: #ff2f2f;
 }
 
 /* Texts */

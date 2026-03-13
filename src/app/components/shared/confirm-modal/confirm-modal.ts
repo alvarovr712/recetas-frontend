@@ -13,6 +13,7 @@ export class ConfirmModal {
   @Input() message = '¿Estás seguro?';
   @Input() confirmText = 'Aceptar';
   @Input() cancelText = 'Cancelar';
+  @Input() isDangerous = false;
 
   @Output() confirmed = new EventEmitter<void>();
   @Output() cancelled = new EventEmitter<void>();

@@ -225,3 +225,24 @@
 .cursor-pointer {
     cursor: pointer;
 }
+
+.step-image-preview {
+    height: 120px;
+    background-size: cover;
+    background-position: center;
+    border: 1px solid #eee;
+    transition: all 0.3s ease;
+}
+
+.step-image-preview:hover::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.3);
+    border-radius: inherit;
+    transition: opacity 0.3s;
+}
+
+.step-image-preview:hover .change-photo-overlay {
+    opacity: 1;
+}

@@ -16,6 +16,7 @@ export interface RecipeDetailDto {
 }
 
 export interface RecipeIngredientDto {
+  ingredientId: string;
   name: string;
   quantity: string;
   unit: string;

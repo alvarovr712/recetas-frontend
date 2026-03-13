@@ -2,9 +2,12 @@
   title="Mis Recetas"
   description="Gestiona tus creaciones culinarias y comparte tus secretos."
   [recipes]="myRecipes"
+  [showEditActions]="true"
   searchMode="myrecipes"
   (categoryChanged)="onCategoryChanged($event)"
   (searchCleared)="loadMyRecipes()"
+  (editRequested)="onEditRecipe($event)"
+  (deleteRequested)="onDeleteRecipe($event)"
 >
   <!-- Extra action button for this specific grid -->
   <button
@@ -22,8 +25,8 @@
     <!-- Header -->
     <div class="modal-header d-flex justify-content-between align-items-start p-4 pb-0 border-0">
       <div>
-        <h3 class="fw-bold mb-1">Crear Nueva Receta</h3>
-        <p class="text-muted small mb-0">Comparte tu talento culinario con la comunidad.</p>
+        <h3 class="fw-bold mb-1">{{ isEditing ? 'Editar Receta' : 'Crear Nueva Receta' }}</h3>
+        <p class="text-muted small mb-0">{{ isEditing ? 'Modifica los detalles de tu receta.' : 'Comparte tu talento culinario con la comunidad.' }}</p>
       </div>
       <button class="btn-close-modal bg-transparent border-0 text-muted" (click)="closeModal()">
         <i class="bi bi-x-lg"></i>
@@ -231,13 +234,25 @@
               [name]="'step' + i"
             ></textarea>
 
+            <div 
+              class="step-image-preview rounded-3 mb-2 cursor-pointer position-relative d-flex align-items-center justify-content-center"
+              *ngIf="step.image"
+              [style.background-image]="'url(' + step.image + ')'"
+              (click)="stepImageInput.click()"
+            >
+              <div class="change-photo-overlay">
+                <i class="bi bi-camera-fill me-2"></i> Cambiar imagen
+              </div>
+            </div>
+
             <button
               class="btn-upload-image border border-secondary border-dashed border-1 border-opacity-25 bg-transparent rounded-3 px-3 py-1 mt-2 text-brand d-inline-flex gap-2 align-items-center small"
               type="button"
               (click)="stepImageInput.click()"
+              *ngIf="!step.image"
             >
               <i class="bi bi-camera-fill"></i>
-              {{ step.image ? 'Cambiar imagen' : 'Subir imagen del paso' }}
+              Subir imagen del paso
             </button>
             <input
               type="file"
@@ -263,7 +278,7 @@
     <div class="modal-footer border-0 p-4 pt-0 d-flex justify-content-end gap-3">
       <button class="btn bg-transparent text-muted fw-bold" (click)="closeModal()">Cancelar</button>
       <button class="btn btn-save-recipe px-4 text-white fw-bold rounded-3" (click)="saveRecipe()">
-        Guardar Receta
+        {{ isEditing ? 'Editar Receta' : 'Guardar Receta' }}
       </button>
     </div>
   </div>
@@ -272,10 +287,22 @@
 <!-- Confirm Modal (appears above creation modal) -->
 <app-confirm-modal
   [isOpen]="isConfirmModalOpen"
-  message="¿Estás seguro de que deseas crear la receta?"
-  confirmText="Crear receta"
-  cancelText="Cancelar"
+  [message]="isEditing ? '¿Estás seguro de editar la receta?' : '¿Estás seguro de que deseas crear la receta?'"
+  [confirmText]="isEditing ? 'Editar receta' : 'Crear receta'"
+  [cancelText]="'Cancelar'"
   (confirmed)="confirmSave()"
   (cancelled)="cancelConfirm()"
+>
+</app-confirm-modal>
+
+<!-- Delete Confirm Modal -->
+<app-confirm-modal
+  [isOpen]="isDeleteConfirmModalOpen"
+  [message]="'¿Estás seguro de que deseas eliminar esta receta? Esta acción no se puede deshacer.'"
+  [confirmText]="'Eliminar'"
+  [cancelText]="'Cancelar'"
+  [isDangerous]="true"
+  (confirmed)="confirmDelete()"
+  (cancelled)="cancelDelete()"
 >
 </app-confirm-modal>

@@ -10,7 +10,7 @@ export interface CreateRecipeRequest {
     quantity: number;
     unit: string;
   }[];
-  recipeSteps: {
+  steps: {
     stepOrder: number;
     instruction: string;
     imageStep: string;
