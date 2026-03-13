@@ -61,6 +61,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
     });
   }
 
+  onNavItemClick() {
+    this.layoutService.closeSidebar();
+  }
+
 
   ngOnDestroy() {
     this.sub.unsubscribe();
