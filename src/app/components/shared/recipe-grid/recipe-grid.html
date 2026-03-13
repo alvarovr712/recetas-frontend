@@ -10,17 +10,18 @@
     </header>
 
     <!-- Title Section -->
-    <section class="title-section mb-4 d-flex justify-content-between align-items-center">
-        <div>
-            <h1 class="display-6 fw-bold mb-1">{{ title }}</h1>
-            <p class="text-muted small mb-0">{{ description }}</p>
+    <section class="title-section mb-4">
+        <div class="d-flex flex-nowrap justify-content-between align-items-center gap-2 mb-1">
+            <h1 class="display-6 fw-bold mb-0 text-truncate flex-grow-1">{{ title }}</h1>
+            <div class="extra-actions-wrapper flex-shrink-0">
+                <ng-content select="[extra-actions]"></ng-content>
+            </div>
         </div>
-        <!-- Slot for Extra Buttons (like "Nueva Receta") -->
-        <ng-content select="[extra-actions]"></ng-content>
+        <p class="text-muted small mb-0 text-truncate w-100">{{ description }}</p>
     </section>
 
     <!-- Categories -->
-    <nav class="categories-nav d-flex flex-nowrap overflow-auto mb-4 pb-2 gap-2">
+    <nav class="categories-nav d-flex flex-wrap mb-4 gap-2">
         <button *ngFor="let cat of categories" class="btn btn-category btn-sm rounded-pill px-3 py-1 fw-bold"
             [class.active]="selectedCategory === cat.value" (click)="selectCategory(cat.value)">
             {{ cat.label }}
@@ -28,8 +29,8 @@
     </nav>
 
     <!-- Recipes Grid -->
-    <div class="row g-4 mb-5">
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2" *ngFor="let recipe of recipes">
+    <div class="row g-3 g-md-4 mb-5">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let recipe of recipes">
             <div class="recipe-card shadow-sm border-0 h-100 overflow-hidden" (click)="goToDetail(recipe.id)" style="cursor: pointer;">
                 <div class="card-image-wrapper">
                     <img [src]="recipe.image" class="w-100 h-100 object-fit-cover" [alt]="recipe.title">

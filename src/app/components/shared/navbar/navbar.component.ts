@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, HostListener, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth.service';
 import { LayoutService } from '../../../services/layout.service';
@@ -18,6 +18,7 @@ export class NavbarComponent implements OnInit {
     private authService = inject(AuthService);
     public layoutService = inject(LayoutService);
     private router = inject(Router);
+    private eRef = inject(ElementRef);
 
     user = {
         name: 'Invitado', 
@@ -25,6 +26,13 @@ export class NavbarComponent implements OnInit {
     };
 
     showDropdown = false;
+
+    @HostListener('document:click', ['$event'])
+    onClickOutside(event: Event) {
+        if (!this.eRef.nativeElement.contains(event.target)) {
+            this.showDropdown = false;
+        }
+    }
 
     ngOnInit() {
         this.authService.currentUser$.subscribe((userInfo: TokenInfoDTO | null) => {

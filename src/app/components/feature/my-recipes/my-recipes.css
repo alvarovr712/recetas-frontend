@@ -12,6 +12,13 @@
     color: white;
 }
 
+@media (max-width: 576px) {
+    .btn-new-recipe {
+        padding: 0.35rem 0.6rem !important;
+        font-size: 0.75rem !important;
+    }
+}
+
 /* Modal Overlay Base */
 .modal-overlay {
     position: fixed;
