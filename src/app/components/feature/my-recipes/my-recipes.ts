@@ -42,6 +42,8 @@ export class MyRecipes implements OnInit {
 
   availableIngredients: Ingredient[] = [];
   isIngredientNewState = false;
+  isManualIngredientMode = false; // Toggle for "Create New" vs "Select"
+  selectedIngredientId = ''; // Selected ingredient ID from <select>
   recipeImageUrl: string = '';
   myRecipes : RecipeCard[] = [];
   uploadedImagesThisSession: string[] = [];
@@ -112,6 +114,11 @@ export class MyRecipes implements OnInit {
     });
 
     this.isIngredientNewState = !exists;
+  }
+  
+  get canAddIngredient(): boolean {
+    if (this.isManualIngredientMode) return false; // In creation mode, must create first
+    return !!this.selectedIngredientId && !!this.newIngredientQty && !!this.newIngredientUnit;
   }
 
   units = ['pizca', 'gramos', 'ml', 'litros', 'cucharadas', 'tazas', 'unidad'];
@@ -200,6 +207,8 @@ export class MyRecipes implements OnInit {
     this.recipeImageUrl = '';
     this.newIngredientName = '';
     this.newIngredientQty = '';
+    this.selectedIngredientId = '';
+    this.isManualIngredientMode = false;
   }
 
   onRecipeImageSelected(event: any) {
@@ -224,18 +233,20 @@ export class MyRecipes implements OnInit {
 
   addIngredient(event?: Event) {
     if (event) event.preventDefault();
-    if (!this.newIngredientName.trim()) return;
+    if (!this.canAddIngredient) return;
+
+    const selectedIng = this.availableIngredients.find(i => i.id === this.selectedIngredientId);
+    if (!selectedIng) return;
 
     this.newRecipe.ingredients.push({
-      name: this.newIngredientName.trim(),
+      name: selectedIng.name,
       quantity: this.newIngredientQty,
       unit: this.newIngredientUnit,
-      ingredientId: this.getIngredientIdByName(this.newIngredientName.trim()),
+      ingredientId: selectedIng.id,
     });
 
-    this.newIngredientName = '';
+    this.selectedIngredientId = '';
     this.newIngredientQty = '';
-    this.updateIngredientNewState();
   }
 
   removeIngredient(index: number) {
@@ -385,16 +396,25 @@ export class MyRecipes implements OnInit {
     if (this.newIngredientName.trim() && !this.isCreatingIngredient) {
       this.isCreatingIngredient = true;
       this.ingredientService.crearIngrediente(this.newIngredientName.trim()).subscribe({
-        next: () => {
+        next: (newIng) => {
           this.loadIngredients().subscribe({
             next: (data) => {
-              setTimeout(() => {
-                this.availableIngredients = data;
-                this.isCreatingIngredient = false;
-                this.updateIngredientNewState();
-                this.toastr.success('Ingrediente creado correctamente', 'Éxito');
-                this.cdr.detectChanges();
-              });
+              this.availableIngredients = data;
+              // Buscamos el recién creado para seleccionarlo
+              const created = this.availableIngredients.find(i => 
+                (i.name || (i as any).nombre).toLowerCase() === this.newIngredientName.trim().toLowerCase()
+              );
+              
+              if (created) {
+                this.selectedIngredientId = created.id;
+              }
+              
+              this.isCreatingIngredient = false;
+              this.isManualIngredientMode = false;
+              this.newIngredientName = '';
+              this.updateIngredientNewState();
+              this.toastr.success('Ingrediente creado correctamente y seleccionado', 'Éxito');
+              this.cdr.detectChanges();
             },
             error: (err) => {
               console.error('Error al recargar', err);

@@ -126,32 +126,61 @@
         <div class="mb-3">
           <label class="form-label small fw-bold mb-1">Ingredientes</label>
           <div class="row g-2 align-items-center">
+            <!-- Mode Selector / Action -->
             <div class="col-sm-5 col-12">
-              <div class="position-relative">
-                <input
-                  type="text"
-                  class="form-control bg-light border-0 custom-input rounded-3"
-                  [(ngModel)]="newIngredientName"
-                  name="newIngredientName"
-                  list="ingredientsList"
-                  (ngModelChange)="updateIngredientNewState()"
-                  autocomplete="off"
-                  placeholder="Escribe o selecciona"
-                />
-                <datalist id="ingredientsList">
-                  <option *ngFor="let ing of availableIngredients" [value]="ing.name"></option>
-                </datalist>
-                <button
-                  *ngIf="isIngredientNewState"
-                  class="btn btn-create-new-ing position-absolute end-0 top-50 translate-middle-y me-2 rounded-circle d-flex align-items-center justify-content-center shadow-sm"
-                  (click)="createNewIngredient()"
-                  title="Crear nuevo ingrediente"
+              <div class="position-relative d-flex gap-2">
+                <!-- Select Existing -->
+                <div class="flex-grow-1" *ngIf="!isManualIngredientMode">
+                  <select
+                    class="form-select bg-light border-0 custom-input rounded-3 text-muted"
+                    [(ngModel)]="selectedIngredientId"
+                    name="selectedIngredientId"
+                  >
+                    <option value="" disabled selected>Selecciona ingrediente</option>
+                    <option *ngFor="let ing of availableIngredients" [value]="ing.id">
+                      {{ ing.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <!-- Create New (Input) -->
+                <div class="flex-grow-1" *ngIf="isManualIngredientMode">
+                  <div class="position-relative">
+                    <input
+                      type="text"
+                      class="form-control bg-light border-0 custom-input rounded-3"
+                      [(ngModel)]="newIngredientName"
+                      name="newIngredientName"
+                      (ngModelChange)="updateIngredientNewState()"
+                      autocomplete="off"
+                      placeholder="Nombre del ingrediente"
+                    />
+                    <button
+                      *ngIf="isIngredientNewState && !isCreatingIngredient"
+                      class="btn btn-create-new-ing position-absolute end-0 top-50 translate-middle-y me-2 rounded-circle d-flex align-items-center justify-content-center shadow-sm"
+                      (click)="createNewIngredient()"
+                      title="Crear ingrediente"
+                      type="button"
+                    >
+                      <i class="bi bi-plus"></i>
+                    </button>
+                    <div *ngIf="isCreatingIngredient" class="position-absolute end-0 top-50 translate-middle-y me-2 spinner-border spinner-border-sm text-brand" role="status"></div>
+                  </div>
+                </div>
+
+                <!-- Toggle Mode Button -->
+                <button 
+                  class="btn btn-light border-0 rounded-3 px-2" 
+                  (click)="isManualIngredientMode = !isManualIngredientMode"
+                  [title]="isManualIngredientMode ? 'Volver a lista' : 'Crear nuevo'"
                   type="button"
                 >
-                  <i class="bi bi-plus"></i>
+                  <i class="bi" [class.bi-plus-circle]="!isManualIngredientMode" [class.bi-list-ul]="isManualIngredientMode"></i>
                 </button>
               </div>
             </div>
+
+            <!-- Quantity -->
             <div class="col-sm-3 col-4">
               <input
                 type="text"
@@ -162,6 +191,8 @@
                 (keydown.enter)="addIngredient($event)"
               />
             </div>
+
+            <!-- Unit -->
             <div class="col-sm-3 col-5">
               <select
                 class="form-select bg-light border-0 custom-input rounded-3 text-muted"
@@ -171,12 +202,16 @@
                 <option *ngFor="let unit of units" [value]="unit">{{ unit | titlecase }}</option>
               </select>
             </div>
+
+            <!-- Add Button -->
             <div class="col-sm-1 col-3 d-flex justify-content-end">
               <button
                 class="btn btn-add-ingredient bg-brand text-white rounded-3 shadow-sm d-flex justify-content-center align-items-center w-100"
                 (click)="addIngredient()"
                 type="button"
                 style="height: 38px"
+                [disabled]="!canAddIngredient"
+                [style.opacity]="canAddIngredient ? '1' : '0.5'"
               >
                 <i class="bi bi-plus-lg"></i>
               </button>
