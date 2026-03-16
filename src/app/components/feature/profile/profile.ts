@@ -9,11 +9,12 @@ import { environment } from '../../../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { Role } from '../../../models/enum/role';
 import { AuthService } from '../../../services/auth.service';
+import { ImageUrlPipe } from '../../../pipes/image-url.pipe';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ImageUrlPipe],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
@@ -61,7 +62,7 @@ export class Profile implements OnInit {
       next: (data) => {
         this.profile = data;
         if (data.image) {
-          this.avatarUrl = `${environment.apiUrl}${data.image}`;
+          this.avatarUrl = data.image;
         }
         this.patchForm(data);
         

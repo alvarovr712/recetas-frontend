@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { RecipeCard } from '../../../models/dtos/recipe-card';
 import { RecipeService } from '../../../services/recipe.service';
+import { ImageUrlPipe } from '../../../pipes/image-url.pipe';
 
 @Component({
   selector: 'app-recipe-grid',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ImageUrlPipe],
   templateUrl: './recipe-grid.html',
   styleUrl: './recipe-grid.css',
 })

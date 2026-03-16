@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { RecipeService } from '../../../services/recipe.service';
 import { RecipeDetailDto } from '../../../models/dtos/recipe-detail';
 import { environment } from '../../../../environments/environment';
+import { ImageUrlPipe } from '../../../pipes/image-url.pipe';
 
 @Component({
   selector: 'app-detail-recipe',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ImageUrlPipe],
   templateUrl: './detail-recipe.html',
   styleUrl: './detail-recipe.css',
 })
@@ -33,7 +34,7 @@ export class DetailRecipe implements OnInit {
       next: (data) => {
         setTimeout(() => {
           if (data.userImage) {
-            data.userImage = `${environment.apiUrl}${data.userImage}`;
+            // data.userImage = `${environment.apiUrl}${data.userImage}`; // Ya no es necesario con el pipe
           }
           this.recipe = data;
           this.isLoading = false;

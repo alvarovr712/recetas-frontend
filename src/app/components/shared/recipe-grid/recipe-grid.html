@@ -33,7 +33,7 @@
         <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let recipe of recipes">
             <div class="recipe-card shadow-sm border-0 h-100 overflow-hidden" (click)="goToDetail(recipe.id)" style="cursor: pointer;">
                 <div class="card-image-wrapper">
-                    <img [src]="recipe.image" class="w-100 h-100 object-fit-cover" [alt]="recipe.title">
+                    <img [src]="recipe.image | imageUrl" [alt]="recipe.title" class="hero-img w-100 h-100 object-fit-cover">
                     
                     <div class="edit-actions-container" *ngIf="showEditActions">
                         <button class="btn-action btn-edit shadow-sm" (click)="onEdit(recipe); $event.stopPropagation()">

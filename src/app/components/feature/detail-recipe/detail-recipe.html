@@ -2,7 +2,7 @@
   <div class="container-fluid px-4 py-4">
     <!-- Hero image with gradient overlay -->
     <div class="hero-wrapper mb-4">
-      <img [src]="recipe.image" [alt]="recipe.title" class="hero-img">
+      <img [src]="recipe.image | imageUrl" [alt]="recipe.title" class="hero-img">
       <div class="hero-gradient"></div>
       <button class="btn-back" (click)="goBack()">
         <i class="bi bi-arrow-left"></i>
@@ -35,7 +35,7 @@
       </div>
       <div class="meta-card shadow-sm" *ngIf="recipe.userName">
         <div class="meta-icon-box avatar-box">
-          <img *ngIf="recipe.userImage" [src]="recipe.userImage" alt="Profile" class="avatar-img rounded-circle object-fit-cover">
+          <img *ngIf="recipe.userImage" [src]="recipe.userImage | imageUrl" alt="Profile" class="avatar-img rounded-circle object-fit-cover">
           <svg *ngIf="!recipe.userImage" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="20" cy="20" r="20" fill="#9ca3af" />
             <path
@@ -88,7 +88,7 @@
               </div>
             </div>
             <div class="step-image-container" *ngIf="step.image">
-              <img [src]="step.image" [alt]="'Paso ' + step.stepOrder" class="step-img">
+              <img [src]="step.image | imageUrl" [alt]="'Paso ' + step.stepOrder" class="step-img">
             </div>
           </div>
         </div>

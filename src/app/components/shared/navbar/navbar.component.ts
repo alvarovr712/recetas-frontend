@@ -5,12 +5,13 @@ import { LayoutService } from '../../../services/layout.service';
 import { Router, RouterModule } from '@angular/router';
 import { TokenInfoDTO } from '../../../models/dtos/token-info-dto';
 import { environment } from '../../../../environments/environment';
+import { ImageUrlPipe } from '../../../pipes/image-url.pipe';
 
 
 @Component({
     selector: 'app-navbar',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, RouterModule, ImageUrlPipe],
     templateUrl: './navbar.component.html',
     styleUrls: ['./navbar.component.css']
 })
@@ -38,7 +39,10 @@ export class NavbarComponent implements OnInit {
         this.authService.currentUser$.subscribe((userInfo: TokenInfoDTO | null) => {
             if (userInfo) {
                 this.user.name = userInfo.username;
-                this.user.avatarUrl = userInfo.image ? `${environment.apiUrl}${userInfo.image}` : '';
+                this.user.avatarUrl = userInfo.image ? userInfo.image : '';
+            } else {
+                this.user.name = 'Invitado';
+                this.user.avatarUrl = '';
             }
         });
     }

@@ -5,7 +5,7 @@
          (click)="fileInput.click()" 
          style="cursor: pointer;" 
          title="Click para cambiar foto">
-      <img *ngIf="avatarUrl" [src]="avatarUrl" class="profile-avatar-large shadow" alt="User Image">
+      <img *ngIf="avatarUrl" [src]="avatarUrl | imageUrl" class="profile-avatar-large shadow" alt="User Image">
       <div *ngIf="!avatarUrl" class="profile-avatar-large-placeholder shadow">
         <span>{{ profile.name.charAt(0) }}{{ profile.surnames.charAt(0) }}</span>
       </div>

@@ -17,7 +17,7 @@
     <div class="user-profile dropdown" [class.show]="showDropdown">
       <span class="username d-none d-md-block">{{ user.name }}</span>
       <div class="profile-avatar clickable" (click)="toggleDropdown()">
-        <img *ngIf="user.avatarUrl" [src]="user.avatarUrl" alt="User Avatar" class="avatar-img">
+        <img [src]="user.avatarUrl | imageUrl" alt="Avatar" class="profile-icon">
         <div *ngIf="!user.avatarUrl" class="avatar-placeholder">
           <i class="bi bi-person-fill"></i>
         </div>
