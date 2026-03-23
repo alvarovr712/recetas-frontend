@@ -8,6 +8,8 @@ import { DetailRecipe } from './components/feature/detail-recipe/detail-recipe';
 import { RegisterComponent } from './components/feature/register/register.component';
 import { Profile } from './components/feature/profile/profile';
 
+import { UserManagementComponent } from './components/feature/user-management/user-management';
+ 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
@@ -16,6 +18,7 @@ export const routes: Routes = [
     { path: 'favorites', component: Favorites },
     { path: 'recipe/:id', component: DetailRecipe },
     { path: 'admin/dashboard', component: DashboardComponent },
+    { path: 'admin/users', component: UserManagementComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'profile', component: Profile }
 ];

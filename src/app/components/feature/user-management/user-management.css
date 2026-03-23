@@ -1,0 +1,185 @@
+.user-management-container {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid #eee;
+}
+
+.table thead th {
+  border-bottom: none;
+  color: #8898aa;
+  letter-spacing: 0.05em;
+}
+
+.user-row {
+  transition: background-color 0.2s;
+}
+
+.user-row:hover {
+  background-color: #fcfaff;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: relative;
+}
+
+.status-dot.active {
+  background-color: #22c55e;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+}
+
+.status-dot.inactive {
+  background-color: #ef4444;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+}
+
+.action-trigger {
+  font-size: 1.2rem;
+  transition: color 0.2s;
+}
+
+.action-trigger:hover {
+  color: #9d4edd !important;
+}
+
+.actions-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 1.5rem;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  z-index: 1050; /* Higher z-index */
+  min-width: 140px;
+  text-align: left;
+}
+
+/* Remove overflow hidden to allow dropdown to overlay */
+.card.overflow-hidden {
+  overflow: visible !important;
+}
+
+.table-responsive {
+  overflow: visible !important;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #4b5563;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.dropdown-item:hover {
+  background-color: #f3e8ff;
+  color: #9d4edd;
+}
+
+.dropdown-item.text-danger {
+  color: #dc2626 !important;
+}
+
+.dropdown-item.text-danger:hover {
+  background-color: #fee2e2;
+  color: #dc2626 !important;
+}
+
+.dropdown-item.text-success {
+  color: #16a34a !important;
+}
+
+.dropdown-item.text-success:hover {
+  background-color: #dcfce7;
+  color: #16a34a !important;
+}
+
+.pagination .page-link {
+  border: none;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0.15rem;
+  border-radius: 50% !important;
+  color: #555;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  background: transparent;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #9d4edd;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(157, 78, 221, 0.3);
+}
+
+.pagination .page-link:hover:not(.disabled) {
+  background-color: #f3e8ff;
+  color: #9d4edd;
+}
+
+.pagination .page-item.disabled .page-link {
+  color: #ccc;
+  background: transparent;
+}
+
+.btn-primary {
+  background-color: #9d4edd;
+  border-color: #9d4edd;
+}
+
+.btn-primary:hover {
+  background-color: #7b2cbf;
+  border-color: #7b2cbf;
+}
+
+.text-primary {
+  color: #9d4edd !important;
+}
+
+.user-avatar-large {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid #eee;
+}
+
+.user-card-mobile {
+  transition: background-color 0.2s;
+}
+
+.user-card-mobile:last-child {
+  border-bottom: none !important;
+}
+
+.user-card-mobile:hover {
+  background-color: #fcfaff;
+}
+
+.pagination-info {
+  white-space: nowrap;
+}

@@ -1,0 +1,193 @@
+<div class="user-management-container p-4">
+  <div class="d-flex justify-content-between align-items-center mb-4 gap-3">
+    <div class="header-titles">
+      <h2 class="h3 fw-bold mb-0">Gestión de Usuarios</h2>
+    </div>
+    <button class="btn btn-primary d-flex align-items-center gap-2 px-4 py-2 justify-content-center" style="border-radius: 12px; font-weight: 600; white-space: nowrap;">
+      <i class="bi bi-person-plus-fill"></i>
+      <span class="d-none d-sm-inline">Añadir Usuario</span>
+      <span class="d-sm-none">Añadir</span>
+    </button>
+  </div>
+
+  <!-- Desktop Table Header (Separate Card) -->
+  <div class="card border-0 shadow-sm mb-3 d-none d-md-block" style="border-radius: 15px;">
+    <div class="table-responsive">
+      <table class="table mb-0" style="table-layout: fixed;">
+        <colgroup>
+          <col style="width: 20%;">
+          <col class="d-none d-lg-table-cell" style="width: 15%;">
+          <col class="d-none d-md-table-cell" style="width: 25%;">
+          <col class="d-none d-sm-table-cell" style="width: 15%;">
+          <col class="d-none d-xl-table-cell" style="width: 15%;">
+          <col style="width: 10%;">
+        </colgroup>
+        <thead class="text-uppercase small fw-bold text-muted border-0">
+          <tr>
+            <th class="ps-4 py-3">Nombre</th>
+            <th class="py-3 d-none d-lg-table-cell">Apellidos</th>
+            <th class="py-3 d-none d-md-table-cell">Email</th>
+            <th class="py-3 d-none d-sm-table-cell">Username</th>
+            <th class="py-3 d-none d-xl-table-cell">Registro</th>
+            <th class="py-3 text-center">Estado</th>
+            <th class="pe-4 py-3 text-end">Acciones</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+
+  <!-- Table Body & Mobile View Card -->
+  <div class="card border-0 shadow-sm" style="border-radius: 20px;">
+    <!-- Desktop Body -->
+    <div class="table-responsive d-none d-md-block">
+      <table class="table table-hover align-middle mb-0" style="table-layout: fixed;">
+        <colgroup>
+          <col style="width: 20%;">
+          <col class="d-none d-lg-table-cell" style="width: 15%;">
+          <col class="d-none d-md-table-cell" style="width: 25%;">
+          <col class="d-none d-sm-table-cell" style="width: 15%;">
+          <col class="d-none d-xl-table-cell" style="width: 15%;">
+          <col style="width: 10%;">
+        </colgroup>
+        <tbody class="border-top-0">
+          <tr *ngFor="let user of users; let i = index" class="user-row">
+            <td class="ps-4">
+              <div class="d-flex align-items-center gap-3">
+                <div class="user-avatar" [style.backgroundImage]="'url(' + (user.image || 'assets/default-avatar.png') + ')'"></div>
+                <div class="d-flex flex-column">
+                  <span class="fw-bold text-nowrap">{{ user.name }}</span>
+                  <span class="small text-muted d-lg-none">{{ user.surnames }}</span>
+                </div>
+              </div>
+            </td>
+            <td class="text-muted d-none d-lg-table-cell">{{ user.surnames }}</td>
+            <td class="text-muted d-none d-md-table-cell">{{ user.email }}</td>
+            <td class="text-primary fw-semibold d-none d-sm-table-cell">{{ user.username }}</td>
+            <td class="text-muted d-none d-xl-table-cell">{{ user.createdAt | date:'dd MMM yyyy' }}</td>
+            <td class="text-center">
+              <span class="status-dot" [class.active]="user.enabled" [class.inactive]="!user.enabled" [title]="user.enabled ? 'Activo' : 'Inactivo'"></span>
+            </td>
+            <td class="pe-4 text-end position-relative">
+              <button class="btn btn-link p-0 text-muted action-trigger" (click)="toggleUserActions(i); $event.stopPropagation()">
+                <i class="bi bi-three-dots-vertical"></i>
+              </button>
+
+              <!-- Actions Dropdown -->
+              <div class="actions-dropdown" *ngIf="activeActionIndex === i" (click)="$event.stopPropagation()">
+                <button class="dropdown-item" (click)="editUser(user)">
+                  <i class="bi bi-pencil me-2"></i> Editar
+                </button>
+                <button class="dropdown-item" 
+                        [class.text-danger]="user.enabled" 
+                        [class.text-success]="!user.enabled"
+                        (click)="openConfirmToggle(user)">
+                  <i class="bi me-2" [class.bi-power]="user.enabled" [class.bi-check-lg]="!user.enabled"></i> 
+                  {{ user.enabled ? 'Desactivar' : 'Activar' }}
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="users.length === 0 && !loading">
+            <td colspan="7" class="text-center py-5 text-muted">No se encontraron usuarios.</td>
+          </tr>
+          <tr *ngIf="loading">
+            <td colspan="7" class="text-center py-5">
+              <div class="spinner-border text-primary" role="status"></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mobile Cards View -->
+    <div class="d-md-none">
+      <div *ngFor="let user of users; let i = index" class="p-4 border-bottom user-card-mobile position-relative">
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <div class="user-avatar-large" [style.backgroundImage]="'url(' + (user.image || 'assets/default-avatar.png') + ')'"></div>
+          <div class="d-flex flex-column flex-grow-1">
+            <div class="d-flex justify-content-between align-items-start w-100">
+              <h5 class="mb-0 fw-bold">{{ user.name }} {{ user.surnames }}</h5>
+              <span class="status-dot mt-1" [class.active]="user.enabled" [class.inactive]="!user.enabled"></span>
+            </div>
+            <span class="text-primary small fw-semibold">{{ user.username }}</span>
+          </div>
+          <div class="position-relative">
+            <button class="btn btn-link p-0 text-muted action-trigger" (click)="toggleUserActions(i); $event.stopPropagation()">
+              <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <!-- Mobile Actions Dropdown -->
+            <div class="actions-dropdown" *ngIf="activeActionIndex === i" (click)="$event.stopPropagation()" style="right: 0; top: 1.5rem;">
+              <button class="dropdown-item" (click)="editUser(user)">
+                <i class="bi bi-pencil me-2"></i> Editar
+              </button>
+              <button class="dropdown-item" 
+                      [class.text-danger]="user.enabled" 
+                      [class.text-success]="!user.enabled"
+                      (click)="openConfirmToggle(user)">
+                <i class="bi me-2" [class.bi-power]="user.enabled" [class.bi-check-lg]="!user.enabled"></i> 
+                {{ user.enabled ? 'Desactivar' : 'Activar' }}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex flex-column gap-2 small text-muted">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-envelope"></i> {{ user.email }}
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-calendar3"></i> Registrado: {{ user.createdAt | date:'dd MMM yyyy' }}
+          </div>
+        </div>
+      </div>
+      <div *ngIf="users.length === 0 && !loading" class="text-center py-5 text-muted">No se encontraron usuarios.</div>
+      <div *ngIf="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Paginator (Separate Component) -->
+  <div class="card border-0 shadow-sm mt-4" style="border-radius: 15px;">
+    <div class="d-flex justify-content-between justify-content-md-end align-items-center px-3 py-3 flex-column flex-md-row gap-4">
+      <div class="pagination-info small text-muted text-center text-md-start">
+        Mostrando <strong>{{ pageSize === -1 ? totalCount : pageSize }}</strong> de 
+        <strong>{{ totalCount }}</strong>
+      </div>
+
+      <div class="d-flex align-items-center gap-3 gap-sm-4 flex-column flex-sm-row w-100 w-md-auto justify-content-md-end">
+        <div class="page-size-selector d-flex align-items-center gap-2">
+          <span class="small text-muted">Filas:</span>
+          <select class="form-select form-select-sm py-0 shadow-none" (change)="onPageSizeChange($event)" [value]="pageSize" style="width: auto; height: 28px; font-size: 0.75rem; border-radius: 8px;">
+            <option *ngFor="let opt of pageSizeOptions" [value]="opt.value">{{ opt.label }}</option>
+          </select>
+        </div>
+
+        <nav *ngIf="totalPages > 1" class="order-first order-sm-last">
+          <ul class="pagination pagination-sm mb-0">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <button class="page-link" (click)="onPageChange(currentPage - 1)"><i class="bi bi-chevron-left"></i></button>
+            </li>
+            <li class="page-item d-none d-sm-block" *ngFor="let p of getPagesArray()" [class.active]="p === currentPage">
+              <button class="page-link" (click)="onPageChange(p)">{{ p }}</button>
+            </li>
+            <li class="page-item disabled d-sm-none">
+              <span class="page-link">{{ currentPage }} / {{ totalPages }}</span>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+              <button class="page-link" (click)="onPageChange(currentPage + 1)"><i class="bi bi-chevron-right"></i></button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-confirm-modal
+  [isOpen]="showModal"
+  [message]="modalMessage"
+  [isDangerous]="!!userToToggle?.enabled"
+  (confirmed)="handleConfirmToggle()"
+  (cancelled)="handleCancelToggle()">
+</app-confirm-modal>

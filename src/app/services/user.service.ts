@@ -7,6 +7,7 @@ import { RegisterDto } from '../models/dtos/register-dto';
 import { environment } from '../../environments/environment';
 import { UserProfileDto } from '../models/dtos/user-profile-dto';
 import { UpdateUserDto } from '../models/dtos/update-user-dto';
+import { UserDto } from '../models/dtos/user-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -52,4 +53,23 @@ export class UserService {
       withCredentials: true,
     });
   }
+
+    getAllUsers(page: number = 1, pageSize: number = 5): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/user`, {
+      params: { 
+        page: page.toString(), 
+        pageSize: pageSize.toString() 
+      },
+      withCredentials: true,
+    });
+  }
+  toggleEnabled(userId: string): Observable<UserDto> {
+  return this.http.put<UserDto>(
+    `${this.baseUrl}/user/toggle-enabled/${userId}`,
+    {}, 
+    { withCredentials: true }
+  );
+}
+
+
 }

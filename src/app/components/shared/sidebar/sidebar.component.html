@@ -44,6 +44,18 @@
           </span>
           <span class="label">Dashboard</span>
         </a>
+
+        <!-- Gestión de Usuarios -->
+        <a *ngIf="(currentUserRole$ | async) === Role.ADMIN" 
+           routerLink="/admin/users" 
+           routerLinkActive="active" 
+           class="menu-item sub-item" 
+           (click)="onNavItemClick()">
+          <span class="icon">
+            <i class="bi bi-people" style="font-size: 0.9rem;"></i>
+          </span>
+          <span class="label">Gestión de Usuarios</span>
+        </a>
       </div>
     </div>
   </div>
