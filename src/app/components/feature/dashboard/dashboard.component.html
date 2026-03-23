@@ -1,4 +1,164 @@
-<div class="container p-4">
-    <h2>Admin Dashboard</h2>
-    <p>Bienvenido al panel de administración.</p>
+<div class="dashboard-container" *ngIf="dashboardData">
+  <header class="dashboard-header">
+    <div class="header-actions">
+      <div class="date-display">
+        <span class="day">Hoy</span>
+        <span class="full-date">{{ today | date:'dd MMMM, y' }}</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="row g-3 mb-4">
+    <div class="col-12 col-md-4">
+      <div class="stat-card">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <div class="stat-icon users-icon-bg">
+            <i class="bi bi-people-fill"></i>
+          </div>
+          <div class="stat-growth positive">
+            +{{ dashboardData.usuariosCrecimiento }}%
+          </div>
+        </div>
+        <div class="stat-content">
+          <span class="stat-label">Usuarios Totales</span>
+          <span class="stat-value">{{ dashboardData.totalUsuarios | number }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-4">
+      <div class="stat-card">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <div class="stat-icon recipes-icon-bg">
+            <i class="bi bi-journal-text"></i>
+          </div>
+          <div class="stat-growth positive">
+            +{{ dashboardData.recetasCrecimiento }}%
+          </div>
+        </div>
+        <div class="stat-content">
+          <span class="stat-label">Recetas Publicadas</span>
+          <span class="stat-value">{{ dashboardData.totalRecetas | number }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-4">
+      <div class="stat-card">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <div class="stat-icon sessions-icon-bg">
+            <i class="bi bi-lightning-fill"></i>
+          </div>
+          <div class="stat-growth positive">
+            +{{ dashboardData.sesionesCrecimiento }}%
+          </div>
+        </div>
+        <div class="stat-content">
+          <span class="stat-label">Sesiones Activas</span>
+          <span class="stat-value">{{ dashboardData.totalSesiones | number }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="activity-section mb-4 p-4">
+    <div class="section-header d-flex flex-column flex-md-row justify-content-md-between align-items-md-center mb-4 text-start">
+      <div class="section-titles mb-3 mb-md-0">
+        <h3 class="h5 mb-0">Actividad de la App</h3>
+        <p class="small text-muted mb-0">Progreso diario de interacciones</p>
+      </div>
+      <div class="section-stats d-flex align-items-center gap-4">
+        <div class="total-activity d-flex align-items-center gap-2">
+          <div class="activity-icon-bg">
+             <i class="bi bi-bar-chart-fill"></i>
+          </div>
+          <span class="activity-value fw-bold h4 mb-0">{{ totalActivity | number }}</span>
+        </div>
+        
+        <div class="month-stepper d-flex align-items-center gap-2">
+          <button class="btn btn-icon-sm" (click)="prevMonth()">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+          
+          <div class="month-display position-relative" (click)="toggleYearPicker(); $event.stopPropagation()">
+            <span class="current-month fw-bold">{{ months[selectedMonth-1].name }} {{ selectedYear }}</span>
+            <i class="bi bi-calendar3 ms-2 small text-muted"></i>
+
+            <!-- Custom Year/Month Picker Overlay -->
+            <div class="picker-overlay" *ngIf="showYearPicker" (click)="$event.stopPropagation()">
+              <div class="picker-header d-flex justify-content-between align-items-center mb-3">
+                <button class="btn btn-sm btn-light" (click)="prevYearPicker()">
+                  <i class="bi bi-chevron-left"></i>
+                </button>
+                <span class="fw-bold">{{ pickerYear }}</span>
+                <button class="btn btn-sm btn-light" (click)="nextYearPicker()">
+                  <i class="bi bi-chevron-right"></i>
+                </button>
+              </div>
+              <div class="month-grid">
+                <button *ngFor="let m of months" 
+                        class="month-btn" 
+                        [class.active]="m.value === selectedMonth && pickerYear === selectedYear"
+                        (click)="selectMonthAtPicker(m.value)">
+                  {{ m.name.substring(0, 3) }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-icon-sm" (click)="nextMonth()">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="chart-wrapper position-relative" (mousemove)="onChartMouseMove($event)" (mouseleave)="onChartMouseLeave()">
+      <div class="chart-container">
+        <svg width="100%" height="180" viewBox="0 0 800 180" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#9d4edd" stop-opacity="0.2" />
+              <stop offset="100%" stop-color="#9d4edd" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+          <path [attr.d]="chartPath" fill="none" stroke="#9d4edd" stroke-width="3" stroke-linecap="round" />
+          <path [attr.d]="chartPath + ' L 800 180 L 0 180 Z'" fill="url(#chartGradient)" />
+          
+          <!-- Hover Effects -->
+          <line *ngIf="hoveredDay" [attr.x1]="tooltipX * 8" y1="0" [attr.x2]="tooltipX * 8" y2="180" stroke="#9d4edd" stroke-width="1" stroke-dasharray="4" />
+          <circle *ngIf="hoveredDay" [attr.cx]="tooltipX * 8" [attr.cy]="tooltipY" r="5" fill="#9d4edd" />
+        </svg>
+      </div>
+
+      <!-- Tooltip -->
+      <div class="chart-tooltip" *ngIf="hoveredDay" [style.left.%]="tooltipX" [style.top.px]="tooltipY - 40">
+        <div class="tooltip-date small">{{ hoveredDay.fecha | date:'dd MMM' }}</div>
+        <div class="tooltip-value">{{ hoveredDay.valor }} interacciones</div>
+      </div>
+      
+      <div class="chart-labels hstack justify-content-between mt-3 px-1 small text-muted">
+        <span *ngFor="let label of chartLabels">{{ label }}</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="ranking-section p-3">
+    <div class="section-header d-flex justify-content-between align-items-center mb-3">
+      <h3 class="h6 mb-0">Ranking de Usuarios Más Activos</h3>
+      <a href="#" class="view-all small">Ver todos</a>
+    </div>
+    <div class="row g-2">
+      <div class="col-6 col-lg-3" *ngFor="let user of dashboardData.usuariosMasActivos; let i = index">
+        <div class="ranking-card p-2">
+          <div class="user-avatar small-avatar" [style.background-image]="'url(' + user.imageUrl + ')'">
+            <span class="rank-badge small">{{ i + 1 }}</span>
+          </div>
+          <div class="user-info">
+            <span class="user-name small">{{ user.name }}</span>
+            <span class="user-activity smaller">{{ user.recetasCreadas }} Recetas</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>

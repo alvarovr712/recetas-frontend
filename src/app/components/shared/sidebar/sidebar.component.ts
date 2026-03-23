@@ -1,4 +1,4 @@
-import { Component, inject, HostBinding, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, HostBinding, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
@@ -19,19 +19,21 @@ import { Role } from '../../../models/enum/role';
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit, OnDestroy {
+  public Role = Role;
   private authService = inject(AuthService);
   private router = inject(Router);
   public layoutService = inject(LayoutService);
+  private cdr = inject(ChangeDetectorRef);
   private sub: Subscription = new Subscription();
 
   @HostBinding('class.open') isOpen = false;
+  public configOpen = false;
 
   public adminMenu = [
     { label: 'Inicio', icon: 'bi bi-grid', route: '/recipes' },
     { label: 'Mis Recetas', icon: 'bi bi-journal-album', route: '/my-recipes' },
     { label: 'Favoritos', icon: 'bi bi-heart', route: '/favorites' },
-    { label: 'Perfil', icon: 'bi bi-person', route: '/profile' },
-    { label: 'Configuración', icon: 'bi bi-gear', route: '/admin/config' }
+    { label: 'Perfil', icon: 'bi bi-person', route: '/profile' }
   ];
 
   public userMenu = [
@@ -42,9 +44,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ];
 
   public menuItems$: Observable<any[]>;
+  public currentUserRole$: Observable<Role | undefined>;
 
 
   constructor() {
+    this.currentUserRole$ = this.authService.currentUser$.pipe(
+      map(user => user?.role as Role)
+    );
+
     this.menuItems$ = this.authService.currentUser$.pipe(
       map(user => {
         if (user && user.role === Role.ADMIN) {
@@ -55,6 +62,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
     );
   }
 
+  toggleConfig() {
+    this.configOpen = !this.configOpen;
+    this.cdr.detectChanges();
+  }
+
   ngOnInit() {
     this.sub = this.layoutService.sidebarOpen$.subscribe(open => {
       this.isOpen = open;
@@ -63,6 +75,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   onNavItemClick() {
     this.layoutService.closeSidebar();
+    this.cdr.detectChanges();
   }
 
 
